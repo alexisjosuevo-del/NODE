@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NODE — Tu conexión hacia la innovación</title>
+  <meta name="description" content="Impulsamos PyMEs y grandes empresas con CRM, cotizadores, catálogos, facturación, automatizaciones y apps móviles." />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="#top" aria-label="Ir al inicio">
+        <img src="assets/logo.png" alt="NODE" class="brand__logo" />
+      </a>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="nav__links" id="navLinks">
+        <div class="dropdown">
+          <button class="dropdown__btn" type="button" aria-expanded="false">
+            Productos <span class="chev">▾</span>
+          </button>
+          <div class="dropdown__panel">
+            <a href="#productos" class="dropdown__item">Cotizadores</a>
+            <a href="#productos" class="dropdown__item">Facturadores</a>
+            <a href="#productos" class="dropdown__item">Catálogos</a>
+            <a href="#productos" class="dropdown__item">Apps móviles</a>
+            <a href="#productos" class="dropdown__item">Dashboards & mapas</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button class="dropdown__btn" type="button" aria-expanded="false">
+            Soluciones <span class="chev">▾</span>
+          </button>
+          <div class="dropdown__panel">
+            <a href="#soluciones" class="dropdown__item">PyMEs</a>
+            <a href="#soluciones" class="dropdown__item">Enterprise</a>
+            <a href="#soluciones" class="dropdown__item">Integraciones</a>
+            <a href="#soluciones" class="dropdown__item">Seguridad</a>
+          </div>
+        </div>
+
+        <a class="nav__link" href="#paquetes">Paquetes</a>
+        <a class="nav__link" href="#casos">Casos</a>
+        <a class="nav__link" href="#contacto">Contacto</a>
+
+        <a class="btn btn--primary nav__cta" href="#contacto">Hablar con un experto</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero hero--video">
+      <video class="hero__bg" autoplay muted loop playsinline preload="metadata">
+        <source src="assets/hero.mp4" type="video/mp4" />
+      </video>
+      <div class="hero__overlay" aria-hidden="true"></div>
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <div class="hero__brandMark"><img src="assets/logo.png" alt="NODE" /></div>
+          <p class="pill">Implementación ágil • Integraciones • Soporte</p>
+          <h1>Tu conexión hacia la innovación</h1>
+          <p class="lead">
+            Creamos ecosistemas digitales completos: <strong>CRM</strong>, <strong>cotizadores</strong>,
+            <strong>catálogos</strong>, <strong>facturación</strong>, <strong>automatizaciones</strong> y
+            <strong>apps móviles</strong>. Todo integrado a Google Sheets, Firebase, APIs y tu operación real.
+          </p>
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="#paquetes">Ver paquetes</a>
+            <a class="btn btn--ghost" href="#productos">Explorar productos</a>
+          </div>
+          <div class="trust">
+            <span class="trust__label">Hecho para equipos que necesitan velocidad:</span>
+            <div class="trust__logos" role="list">
+              <span role="listitem" class="chip">PyMEs</span>
+              <span role="listitem" class="chip">Healthcare</span>
+              <span role="listitem" class="chip">Retail</span>
+              <span role="listitem" class="chip">Servicios</span>
+              <span role="listitem" class="chip">Logística</span>
+              <span role="listitem" class="chip">Finanzas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__panel" aria-label="Panel de producto (demo visual)">
+          <div class="panel">
+            <div class="panel__top">
+              <div class="dot dot--r"></div>
+              <div class="dot dot--y"></div>
+              <div class="dot dot--g"></div>
+              <span class="panel__title">CRM + Cotizador + Facturación</span>
+            </div>
+            <div class="panel__body">
+              <div class="kpi-row">
+                <div class="kpi">
+                  <div class="kpi__num"><span data-count="38">0</span>%</div>
+                  <div class="kpi__lbl">menos tiempo en cotizar</div>
+                </div>
+                <div class="kpi">
+                  <div class="kpi__num"><span data-count="4">0</span>x</div>
+                  <div class="kpi__lbl">más seguimiento KAM</div>
+                </div>
+                <div class="kpi">
+                  <div class="kpi__num"><span data-count="99">0</span>%</div>
+                  <div class="kpi__lbl">trazabilidad (bitácoras)</div>
+                </div>
+              </div>
+
+              <div class="mini">
+                <div class="mini__header">
+                  <strong>Pipeline</strong>
+                  <span class="mini__tag">Tiempo real</span>
+                </div>
+                <div class="mini__bars">
+                  <div class="bar"><span style="width:72%"></span></div>
+                  <div class="bar"><span style="width:54%"></span></div>
+                  <div class="bar"><span style="width:86%"></span></div>
+                </div>
+                <p class="mini__note">Diseñado para operación real: roles, permisos, auditoría, reportes y exportables.</p>
+              </div>
+
+              <div class="panel__cta">
+                <a class="btn btn--small btn--ghost" href="#contacto">Solicitar demo</a>
+                <a class="btn btn--small btn--primary" href="#paquetes">Elegir paquete</a>
+              </div>
+            </div>
+          </div>
+          <p class="hero__hint">*Demo visual — personalizamos módulos por industria, tamaño y presupuesto.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="productos">
+      <div class="container">
+        <div class="section__head">
+          <h2>Productos que se integran entre sí</h2>
+          <p class="muted">Selecciona un objetivo y mira cómo conectamos módulos (tipo “tabs” para navegación clara).</p>
+        </div>
+
+        <div class="tabs" data-tabs>
+          <div class="tabs__rail" role="tablist" aria-label="Objetivos">
+            <button class="tab is-active" role="tab" aria-selected="true" data-tab="ingresos">Incrementar ingresos</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="operacion">Ordenar operación</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="control">Control & auditoría</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="experiencia">Mejorar experiencia</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="datos">Datos & analítica</button>
+          </div>
+
+          <div class="tabs__content">
+            <article class="tabpane is-active" data-pane="ingresos">
+              <div class="tabpane__grid">
+                <div>
+                  <h3>Cotiza más rápido y vende más</h3>
+                  <p>
+                    Cotizadores con listas de precios, reglas de descuento (topes), IVA, PDF automático,
+                    historial por cliente y aprobación interna. Integración con inventario y CRM.
+                  </p>
+                  <ul class="bullets">
+                    <li>PDFs profesionales (logo, firma, términos)</li>
+                    <li>Flujos por rol: admin / vendedor / KAM</li>
+                    <li>Tablas de precios desde Sheets / ERP</li>
+                  </ul>
+                  <a class="link" href="#paquetes">Ver paquetes recomendados →</a>
+                </div>
+                <div class="cardgrid">
+                  <div class="card">
+                    <h4>Cotizador</h4>
+                    <p>Descuentos, IVA, PDF, exportables, historial.</p>
+                  </div>
+                  <div class="card">
+                    <h4>Catálogo</h4>
+                    <p>Productos, filtros, fichas, carrito y pedido.</p>
+                  </div>
+                  <div class="card">
+                    <h4>CRM</h4>
+                    <p>Pipeline, seguimiento, recordatorios, reportes.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tabpane" data-pane="operacion">
+              <div class="tabpane__grid">
+                <div>
+                  <h3>Operación sin caos: procesos y bitácoras</h3>
+                  <p>
+                    Estandarizamos procesos con bitácoras, checklists, roles y trazabilidad.
+                    Dashboard en tiempo real con métricas por equipo y sucursal.
+                  </p>
+                  <ul class="bullets">
+                    <li>Bitácoras por área (TI, ventas, caja, logística)</li>
+                    <li>Flujos de aprobación y estados</li>
+                    <li>Alertas por WhatsApp/Email (automatización)</li>
+                  </ul>
+                  <a class="link" href="#contacto">Cuéntame tu operación →</a>
+                </div>
+                <div class="cardgrid">
+                  <div class="card">
+                    <h4>Panel operativo</h4>
+                    <p>KPIs por día/semana, embudos, mapas, alertas.</p>
+                  </div>
+                  <div class="card">
+                    <h4>Automatización</h4>
+                    <p>n8n, bots, disparadores, integración con APIs.</p>
+                  </div>
+                  <div class="card">
+                    <h4>Integraciones</h4>
+                    <p>Google Workspace, Firebase, ERP, pagos.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tabpane" data-pane="control">
+              <div class="tabpane__grid">
+                <div>
+                  <h3>Control y cumplimiento</h3>
+                  <p>
+                    Módulos con auditoría, control de accesos, MFA/SSO (si aplica), permisos por rol,
+                    logs, respaldos y evidencia para auditorías.
+                  </p>
+                  <ul class="bullets">
+                    <li>Matriz RBAC y permisos por módulo</li>
+                    <li>Respaldo y versionamiento</li>
+                    <li>Políticas y evidencias (documental y técnica)</li>
+                  </ul>
+                  <a class="link" href="#soluciones">Ver enfoque de seguridad →</a>
+                </div>
+                <div class="cardgrid">
+                  <div class="card">
+                    <h4>RBAC</h4>
+                    <p>Roles, permisos y trazabilidad por usuario.</p>
+                  </div>
+                  <div class="card">
+                    <h4>Logs</h4>
+                    <p>Bitácoras, eventos, exportables para auditoría.</p>
+                  </div>
+                  <div class="card">
+                    <h4>Backups</h4>
+                    <p>Respaldos programados y recuperación.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tabpane" data-pane="experiencia">
+              <div class="tabpane__grid">
+                <div>
+                  <h3>Experiencias para clientes y equipo</h3>
+                  <p>
+                    Sitios web rápidos, landing pages por campaña, formularios, chatbots, portales
+                    de clientes y apps móviles para operación en campo.
+                  </p>
+                  <ul class="bullets">
+                    <li>Web + SEO básico + analytics</li>
+                    <li>Chatbot / WhatsApp Business</li>
+                    <li>Portal de clientes (consulta y documentos)</li>
+                  </ul>
+                  <a class="link" href="#paquetes">Paquetes con web + CRM →</a>
+                </div>
+                <div class="cardgrid">
+                  <div class="card">
+                    <h4>Web</h4>
+                    <p>Landing, corporativo, catálogo, portal.</p>
+                  </div>
+                  <div class="card">
+                    <h4>App móvil</h4>
+                    <p>Android/iOS (PWA o nativo según caso).</p>
+                  </div>
+                  <div class="card">
+                    <h4>Chatbot</h4>
+                    <p>Atención, calificación de leads, soporte.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tabpane" data-pane="datos">
+              <div class="tabpane__grid">
+                <div>
+                  <h3>Datos listos para decisiones</h3>
+                  <p>
+                    Tableros con métricas, mapas, cohortes, exportables, y fuentes unificadas.
+                    Conectamos tus hojas, Firestore, formularios y APIs para una sola “fuente de verdad”.
+                  </p>
+                  <ul class="bullets">
+                    <li>Dashboards en tiempo real</li>
+                    <li>Mapas y segmentación</li>
+                    <li>Exportables (Excel/CSV/PDF)</li>
+                  </ul>
+                  <a class="link" href="#casos">Ver ejemplos →</a>
+                </div>
+                <div class="cardgrid">
+                  <div class="card">
+                    <h4>BI ligero</h4>
+                    <p>KPIs, filtros, reportes y tendencias.</p>
+                  </div>
+                  <div class="card">
+                    <h4>Mapas</h4>
+                    <p>Territorios, cobertura, performance por zona.</p>
+                  </div>
+                  <div class="card">
+                    <h4>Data hub</h4>
+                    <p>Unificación de fuentes y gobernanza.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="slider-wrap" aria-label="Comparativa visual (demo)">
+          <div class="slider-head">
+            <h3>De “todo suelto” a un sistema integrado</h3>
+            <p class="muted">Arrastra el control para ver la diferencia (demo visual de interfaz).</p>
+          </div>
+
+          <div class="ba" data-ba>
+            <div class="ba__layer ba__layer--after">
+              <div class="ba__mock">
+                <div class="mock-top">
+                  <span class="mock-pill">Después</span>
+                  <span class="mock-title">CRM + Cotización + Reportes</span>
+                </div>
+                <div class="mock-grid">
+                  <div class="mock-card"></div>
+                  <div class="mock-card"></div>
+                  <div class="mock-card"></div>
+                  <div class="mock-card"></div>
+                </div>
+              </div>
+            </div>
+            <div class="ba__layer ba__layer--before">
+              <div class="ba__mock ba__mock--dim">
+                <div class="mock-top">
+                  <span class="mock-pill">Antes</span>
+                  <span class="mock-title">Archivos + chats + notas</span>
+                </div>
+                <div class="mock-grid">
+                  <div class="mock-row"></div>
+                  <div class="mock-row"></div>
+                  <div class="mock-row"></div>
+                  <div class="mock-row"></div>
+                </div>
+              </div>
+            </div>
+            <input class="ba__range" type="range" min="10" max="90" value="55" aria-label="Comparativa" />
+            <div class="ba__handle" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="soluciones">
+      <div class="container">
+        <div class="section__head">
+          <h2>Soluciones por tamaño de empresa</h2>
+          <p class="muted">Lo armamos modular: empiezas pequeño y creces sin rehacer todo.</p>
+        </div>
+
+        <div class="split">
+          <div class="split__card">
+            <h3>PyMEs</h3>
+            <p>Arranca rápido con lo esencial y automatiza lo repetitivo.</p>
+            <ul class="bullets">
+              <li>Web + catálogo / landing</li>
+              <li>Cotizador con PDFs y control de descuentos</li>
+              <li>CRM ligero con pipeline y seguimiento</li>
+              <li>Automatizaciones (WhatsApp/Email) y reportes</li>
+            </ul>
+            <a class="btn btn--ghost" href="#paquetes">Ver PyME →</a>
+          </div>
+
+          <div class="split__card">
+            <h3>Enterprise</h3>
+            <p>Gobernanza, roles, integraciones y seguridad para escalar.</p>
+            <ul class="bullets">
+              <li>CRM multi-equipo (RBAC + auditoría)</li>
+              <li>Facturación y control de caja / inventario</li>
+              <li>Integración con ERP, SSO/MFA (cuando aplique)</li>
+              <li>Dashboards en tiempo real + analítica avanzada</li>
+            </ul>
+            <a class="btn btn--ghost" href="#contacto">Agendar discovery →</a>
+          </div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric__num"><span data-count="7">0</span>+</div>
+            <div class="metric__lbl">módulos principales</div>
+          </div>
+          <div class="metric">
+            <div class="metric__num"><span data-count="14">0</span>d</div>
+            <div class="metric__lbl">implementación típica MVP</div>
+          </div>
+          <div class="metric">
+            <div class="metric__num"><span data-count="24">0</span>/7</div>
+            <div class="metric__lbl">monitoreo (según paquete)</div>
+          </div>
+          <div class="metric">
+            <div class="metric__num"><span data-count="100">0</span>%</div>
+            <div class="metric__lbl">enfocado a operación real</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="paquetes">
+      <div class="container">
+        <div class="section__head">
+          <h2>Paquetes (modulares)</h2>
+          <p class="muted">Elige un punto de partida y personalizamos: módulos, integraciones y branding.</p>
+        </div>
+
+        <div class="pricing">
+          <article class="price">
+            <div class="price__top">
+              <h3>Starter</h3>
+              <p class="price__tag">Para empezar</p>
+            </div>
+            <ul>
+              <li>Landing o sitio básico</li>
+              <li>Catálogo simple (sin pagos)</li>
+              <li>Formulario + analytics</li>
+              <li>Entrega rápida + guía</li>
+            </ul>
+            <a class="btn btn--primary" href="#contacto">Cotizar</a>
+          </article>
+
+          <article class="price is-featured">
+            <div class="price__top">
+              <h3>Growth</h3>
+              <p class="price__tag">Lo más solicitado</p>
+            </div>
+            <ul>
+              <li>Cotizador (PDF, IVA, descuentos)</li>
+              <li>CRM ligero (pipeline + KAM)</li>
+              <li>Catálogo con filtros</li>
+              <li>Reportes + exportables</li>
+            </ul>
+            <a class="btn btn--primary" href="#contacto">Agendar demo</a>
+          </article>
+
+          <article class="price">
+            <div class="price__top">
+              <h3>Scale</h3>
+              <p class="price__tag">Operación completa</p>
+            </div>
+            <ul>
+              <li>Facturación / recibos + PDF</li>
+              <li>Inventario + caja</li>
+              <li>Automatizaciones (n8n)</li>
+              <li>Tablero en tiempo real</li>
+            </ul>
+            <a class="btn btn--primary" href="#contacto">Cotizar</a>
+          </article>
+
+          <article class="price">
+            <div class="price__top">
+              <h3>Enterprise</h3>
+              <p class="price__tag">A la medida</p>
+            </div>
+            <ul>
+              <li>RBAC, auditoría, respaldos</li>
+              <li>Integración con ERP / SSO</li>
+              <li>Apps móviles (PWA/nativo)</li>
+              <li>SLA + monitoreo</li>
+            </ul>
+            <a class="btn btn--primary" href="#contacto">Discovery</a>
+          </article>
+        </div>
+
+        <div class="note">
+          <strong>Tip:</strong> Si ya tienes hojas (Sheets) o Firebase, podemos conectar y migrar sin frenar tu operación.
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="casos">
+      <div class="container">
+        <div class="section__head">
+          <h2>Casos y ejemplos (plantillas)</h2>
+          <p class="muted">Te dejamos el sitio listo para crecer: secciones reutilizables para tus proyectos.</p>
+        </div>
+
+        <div class="cases">
+          <article class="case">
+            <h3>CRM + Seguimiento KAM</h3>
+            <p>Pipeline, recordatorios, métricas por ejecutivo, exportables.</p>
+            <span class="badge">CRM</span>
+          </article>
+          <article class="case">
+            <h3>Cotizador con reglas</h3>
+            <p>Topes de descuento, precios por lista, PDFs consistentes.</p>
+            <span class="badge">Cotización</span>
+          </article>
+          <article class="case">
+            <h3>Catálogo / POS</h3>
+            <p>Catálogo, control de inventario, caja diaria, reportes.</p>
+            <span class="badge">Operación</span>
+          </article>
+          <article class="case">
+            <h3>Automatización con n8n</h3>
+            <p>WhatsApp/Email, publicaciones, sincronización de datos.</p>
+            <span class="badge">Automatización</span>
+          </article>
+        </div>
+
+        <div class="quote">
+          <p>
+            “Lo que más valoramos: <strong>velocidad</strong> para implementar, <strong>trazabilidad</strong> para auditoría,
+            y <strong>modularidad</strong> para crecer sin volver a empezar.”
+          </p>
+          <div class="quote__by">
+            <span class="avatar" aria-hidden="true"></span>
+            <div>
+              <strong>Equipo Operativo</strong>
+              <span class="muted">PyME → Enterprise</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contacto">
+      <div class="container">
+        <div class="section__head">
+          <h2>Contacto</h2>
+          <p class="muted">Dime qué necesitas y te propongo el paquete + módulos exactos (con roadmap).</p>
+        </div>
+
+        <div class="contact">
+          <form class="form" onsubmit="return window.NODE_submitLead(event)">
+            <div class="grid2">
+              <label>
+                Nombre
+                <input required name="nombre" placeholder="Tu nombre" />
+              </label>
+              <label>
+                Empresa
+                <input required name="empresa" placeholder="Nombre de tu empresa" />
+              </label>
+            </div>
+            <div class="grid2">
+              <label>
+                WhatsApp / Teléfono
+                <input name="telefono" placeholder="+52 ..." />
+              </label>
+              <label>
+                Correo
+                <input required type="email" name="correo" placeholder="tu@empresa.com" />
+              </label>
+            </div>
+            <label>
+              ¿Qué quieres implementar?
+              <select name="interes">
+                <option>Cotizador</option>
+                <option>Catálogo</option>
+                <option>CRM (PyME)</option>
+                <option>CRM (Enterprise)</option>
+                <option>Facturación / Caja</option>
+                <option>App móvil</option>
+                <option>Automatización / Bots</option>
+                <option>Todo integrado</option>
+              </select>
+            </label>
+            <label>
+              Describe tu proceso / dolor principal
+              <textarea required name="mensaje" rows="5" placeholder="Ej: cotizamos en Excel, luego facturamos aparte, y se pierde seguimiento..."></textarea>
+            </label>
+
+            <div class="form__actions">
+              <button class="btn btn--primary" type="submit">Enviar</button>
+              <p class="muted small">
+                *Este demo guarda el mensaje en tu navegador (localStorage). Para recibir mensajes en tu correo,
+                conecta Formspree/Netlify Forms o tu backend.
+              </p>
+            </div>
+          </form>
+
+          <aside class="side">
+            <div class="side__card">
+              <h3>¿Qué incluye el entregable?</h3>
+              <ul class="bullets">
+                <li>Sitio responsivo (HTML/CSS/JS)</li>
+                <li>Secciones: productos, soluciones, paquetes, casos</li>
+                <li>Animaciones ligeras y tabs</li>
+                <li>Logo + favicon incluidos</li>
+              </ul>
+            </div>
+            <div class="side__card">
+              <h3>Siguientes pasos</h3>
+              <ol class="steps">
+                <li>1) Discovery (30–45 min)</li>
+                <li>2) Prototipo + alcance</li>
+                <li>3) MVP (1–3 semanas)</li>
+                <li>4) Iteración + crecimiento</li>
+              </ol>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div>
+          <img src="assets/logo.png" alt="NODE" class="footer__logo" />
+          <p class="muted">NODE — Tu conexión hacia la innovación</p>
+        </div>
+        <div class="footer__links">
+          <a href="#productos">Productos</a>
+          <a href="#soluciones">Soluciones</a>
+          <a href="#paquetes">Paquetes</a>
+          <a href="#contacto">Contacto</a>
+        </div>
+        <div class="footer__small muted">
+          <p>© <span id="year"></span> NODE. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
