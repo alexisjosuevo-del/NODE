@@ -173,4 +173,44 @@
     }
   `;
   document.head.appendChild(s);
+
+  // Demo box tabs + mini quote calculator
+  qsa('[data-demo="true"]').forEach(box=>{
+    const tabs = qsa('[data-demo-tab]', box);
+    const panes = qsa('[data-demo-pane]', box);
+
+    const setActive = (key)=>{
+      tabs.forEach(t=>t.classList.toggle('is-active', t.dataset.demoTab === key));
+      panes.forEach(p=>p.classList.toggle('is-active', p.dataset.demoPane === key));
+    };
+
+    tabs.forEach(t=>t.addEventListener('click', ()=>setActive(t.dataset.demoTab)));
+
+    // Quote calculator
+    const base = qs('[data-qc="base"]', box);
+    const desc = qs('[data-qc="desc"]', box);
+    const ivaOn = qs('[data-qc="ivaOn"]', box);
+    const total = qs('[data-qc="total"]', box);
+
+    const money = (n)=>{
+      try{
+        return new Intl.NumberFormat('es-MX', {style:'currency', currency:'MXN', maximumFractionDigits:0}).format(n);
+      }catch(e){
+        return '$' + Math.round(n).toLocaleString();
+      }
+    };
+
+    const calc = ()=>{
+      if (!total || !base || !desc) return;
+      const b = Math.max(0, Number(base.value || 0));
+      const d = Math.min(50, Math.max(0, Number(desc.value || 0)));
+      const net = b * (1 - (d/100));
+      const withIva = ivaOn && ivaOn.checked ? net * 1.16 : net;
+      total.textContent = money(withIva);
+    };
+
+    [base, desc, ivaOn].forEach(el=> el && el.addEventListener('input', calc));
+    calc();
+  });
+
 })();

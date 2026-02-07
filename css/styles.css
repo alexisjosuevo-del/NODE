@@ -824,3 +824,130 @@ input:focus, select:focus, textarea:focus{
     border-radius: 22px;
   }
 }
+
+
+
+/* --- Updates from PDF feedback (copy + demo + pricing clarity) --- */
+.hero__sub{
+  margin: 10px 0 0;
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+.demoBox{
+  margin-top: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, .10);
+  background: rgba(255,255,255,.78);
+  overflow: hidden;
+}
+.demoTabs{
+  display:flex;
+  gap: 8px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(15, 23, 42, .08);
+  background: rgba(247,250,255,.85);
+}
+.demoTab{
+  appearance:none;
+  border: 1px solid rgba(15, 23, 42, .12);
+  background: rgba(255,255,255,.9);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 900;
+  cursor:pointer;
+  color: rgba(2, 6, 23, .82);
+}
+.demoTab.is-active{
+  border-color: rgba(244,194,78,.70);
+  box-shadow: 0 10px 26px rgba(2, 6, 23, .08);
+}
+.demoPane{
+  display:none;
+  padding: 12px 12px 14px;
+}
+.demoPane.is-active{ display:block; }
+
+.quoteCalc label{
+  display:flex;
+  flex-direction:column;
+  gap: 6px;
+  font-weight: 800;
+  color: rgba(2, 6, 23, .82);
+}
+.quoteCalc input[type="number"]{
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, .12);
+  background: rgba(255,255,255,.92);
+  font-weight: 800;
+}
+.quoteCalc__row{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.quoteCalc__row--tight{
+  grid-template-columns: 1fr auto;
+  align-items:center;
+  margin-top: 10px;
+}
+.check{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center;
+  gap: 10px !important;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, .10);
+  background: rgba(247,250,255,.75);
+}
+.quoteCalc__total{
+  text-align:right;
+  padding: 6px 8px;
+}
+.quoteCalc__total span{
+  display:block;
+  color: rgba(2, 6, 23, .55);
+  font-weight: 900;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+}
+.quoteCalc__total strong{
+  display:block;
+  font-size: 22px;
+  letter-spacing: .2px;
+}
+
+/* Pricing: incremental clarity */
+.price ul{
+  list-style: none;
+  padding-left: 0;
+}
+.price li{
+  padding-left: 24px;
+  position: relative;
+}
+.price li::before{
+  content:"✓";
+  position:absolute;
+  left: 0;
+  top: 0;
+  color: rgba(2, 6, 23, .35);
+  font-weight: 900;
+}
+.price li.is-included{
+  opacity: .75;
+}
+.price li.is-new{
+  opacity: 1;
+}
+.price li.is-new::before{
+  color: rgba(244,194,78,.95);
+}
+@media (max-width: 560px){
+  .quoteCalc__row{ grid-template-columns: 1fr; }
+  .quoteCalc__row--tight{ grid-template-columns: 1fr; text-align:left; }
+  .quoteCalc__total{ text-align:left; }
+}
