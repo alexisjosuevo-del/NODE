@@ -792,20 +792,29 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 #showcase-video{padding:5rem 0;background:var(--surface-page)}
 .showcase-shell{margin-top:2.5rem}
 .showcase-video{
-  position:relative;overflow:hidden;border-radius:24px;min-height:420px;
-  border:1px solid var(--border-default);box-shadow:var(--shadow-lg);background:#0f172a;
+  position:relative;overflow:hidden;border-radius:24px;
+  /* altura dinámica: crece con el contenido interno (el dashboard) */
+  min-height:480px;
+  border:1px solid var(--border-default);box-shadow:var(--shadow-lg);background:#050508;
+  /* Asegura que el #interactive-dashboard hijo pueda usar height:100% */
+  display:flex;flex-direction:column;
+}
+/* El dashboard interactivo ocupa todo el espacio del recuadro */
+.showcase-video > #interactive-dashboard,
+.showcase-video > .interactive-dash-section {
+  flex:1;min-height:480px;
 }
 .showcase-video__media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .showcase-video__overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(15,23,42,.38))}
 .showcase-video__badge{
-  position:absolute;top:18px;left:18px;z-index:2;
+  position:absolute;top:18px;left:18px;z-index:10;
   display:inline-flex;align-items:center;gap:.5rem;
   background:rgba(255,255,255,.88);backdrop-filter:blur(8px);
   border:1px solid rgba(255,255,255,.72);color:var(--text-primary);
   padding:.55rem .95rem;border-radius:999px;font-size:.82rem;font-weight:700;
   box-shadow:var(--shadow-sm)
 }
-.showcase-video__content{position:relative;z-index:2;display:flex;align-items:flex-end;min-height:420px;padding:2rem}
+.showcase-video__content{position:relative;z-index:2;display:flex;align-items:flex-end;padding:2rem;pointer-events:none}
 .showcase-video__card{
   max-width:540px;background:rgba(255,255,255,.90);backdrop-filter:blur(12px);
   border:1px solid rgba(255,255,255,.8);border-radius:20px;padding:1.2rem 1.25rem;box-shadow:var(--shadow-md)
@@ -813,14 +822,16 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 .showcase-video__card h3{margin:0 0 .5rem;font-size:1.3rem;line-height:1.15;color:var(--text-primary)}
 .showcase-video__card p{margin:0;color:var(--text-secondary);line-height:1.65;font-size:.96rem}
 @media(max-width:768px){
-  .showcase-video,.showcase-video__content{min-height:340px}
+  .showcase-video,
+  .showcase-video > #interactive-dashboard,
+  .showcase-video > .interactive-dash-section{min-height:340px}
   .showcase-video__card{max-width:none}
 }
 
 /* ══════════════════════════════════════════
    TESTIMONIOS — white with indigo-50 quote
 ══════════════════════════════════════════ */
-#testimonios{padding:5rem 0;background:var(--surface-page)}
+
 .testi-grid{display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:3rem}
 @media(min-width:640px){.testi-grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1024px){.testi-grid{grid-template-columns:repeat(3,1fr)}}
@@ -1008,24 +1019,24 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 }
 
 /* ── Modal overlay ── */
+/* El overlay arranca DEBAJO del navbar — el encabezado siempre queda visible */
 #node-privacy-overlay{
-  position:fixed;inset:0;z-index:9100;
+  position:fixed;top:64px;left:0;right:0;bottom:0;z-index:190;
   background:rgba(30,45,64,.50);
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  display:flex;align-items:flex-end;justify-content:center;
-  padding:12px;
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;
   opacity:0;pointer-events:none;
   transition:opacity var(--dur-slow) var(--ease-base)
 }
 #node-privacy-overlay.pm-visible{opacity:1;pointer-events:auto}
-@media(min-width:640px){#node-privacy-overlay{align-items:center}}
 
 #node-privacy-modal{
   background:var(--surface-elevated);
   border:1px solid var(--border-default);
   border-radius:var(--radius-lg);
   box-shadow:var(--shadow-xl);
-  width:100%;max-width:720px;max-height:92vh;
+  width:100%;max-width:720px;max-height:calc(100vh - 80px);
   overflow:hidden;display:flex;flex-direction:column;
   transform:translateY(24px) scale(0.97);
   transition:transform var(--dur-enter) var(--ease-spring)
@@ -1248,16 +1259,15 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
     text-align:center
   }
 
-  /* Modal: ocupa la pantalla completa verticalmente */
+  /* Modal mobile: el encabezado sigue visible (overlay top:64px) */
   #node-privacy-overlay{
-    padding:0;
+    padding:8px;
     align-items:flex-end
   }
   #node-privacy-modal{
     border-radius:var(--radius-lg) var(--radius-lg) 0 0;
-    max-height:94vh;
-    /* Asegurar que el teclado virtual no lo rompa */
-    max-height:94dvh
+    max-height:calc(100vh - 76px);
+    max-height:calc(100dvh - 76px)
   }
 
   /* Header del modal más compacto */
@@ -1371,7 +1381,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
   #node-privacy-overlay{align-items:center;padding:16px}
   #node-privacy-modal{
     border-radius:var(--radius-lg);
-    max-height:90vh;max-height:90dvh
+    max-height:calc(90vh - 64px);max-height:calc(90dvh - 64px)
   }
   .pm-footer{flex-direction:row}
   .btn-pm-accept,.btn-pm-dismiss{width:auto}
@@ -1496,13 +1506,13 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 }
 .ns-why-text .overline{color:var(--indigo);display:block;margin-bottom:.875rem}
 .ns-why-quote{
-  font-family:'Space Grotesk',system-ui,sans-serif;font-weight:700;
+  font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'Noto Sans','Helvetica Neue',sans-serif;font-weight:700;
   font-size:clamp(1.625rem,3vw,2.25rem);line-height:1.20;letter-spacing:-0.01em;
   color:var(--text-primary);margin-bottom:1.25rem
 }
 .ns-why-quote em{font-style:normal;background:var(--gradient-text-hero);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.ns-why-body{font-family:'Space Grotesk',system-ui,sans-serif;font-weight:400;font-size:1rem;color:var(--text-secondary);line-height:1.65;margin-bottom:1.5rem}
-.ns-why-body strong{font-family:'Space Grotesk',system-ui,sans-serif;font-weight:600;color:var(--text-primary)}
+.ns-why-body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'Noto Sans','Helvetica Neue',sans-serif;font-weight:400;font-size:1rem;color:var(--text-secondary);line-height:1.65;margin-bottom:1.5rem}
+.ns-why-body strong{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'Noto Sans','Helvetica Neue',sans-serif;font-weight:600;color:var(--text-primary)}
 .ns-pill-row{display:flex;flex-wrap:wrap;gap:.625rem}
 .ns-pill{
   display:inline-flex;align-items:center;gap:.375rem;
@@ -1569,8 +1579,8 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 .vi-indigo svg{color:var(--indigo)}
 .vi-teal{background:var(--teal-50)}
 .vi-teal svg{color:var(--teal-700)}
-.valor-name{font-family:'Space Grotesk',system-ui,sans-serif;font-weight:600;font-size:1.125rem;line-height:1.40;color:var(--text-primary);margin-bottom:.3rem}
-.valor-desc{font-family:'Space Grotesk',system-ui,sans-serif;font-weight:400;font-size:1rem;color:var(--text-secondary);line-height:1.65}
+.valor-name{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'Noto Sans','Helvetica Neue',sans-serif;font-weight:600;font-size:1.125rem;line-height:1.40;color:var(--text-primary);margin-bottom:.3rem}
+.valor-desc{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'Noto Sans','Helvetica Neue',sans-serif;font-weight:400;font-size:1rem;color:var(--text-secondary);line-height:1.65}
 
 /* Para quién */
 .ns-quien-grid{
@@ -1595,8 +1605,8 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
   display:flex;align-items:center;justify-content:center;
   margin:0 auto .875rem;font-size:1.5rem
 }
-.quien-title{font-family:'Space Grotesk',system-ui,sans-serif;font-weight:600;font-size:1.125rem;line-height:1.40;color:var(--text-primary);margin-bottom:.5rem}
-.quien-desc{font-family:'Space Grotesk',system-ui,sans-serif;font-weight:400;font-size:.8125rem;color:var(--text-secondary);line-height:1.50;letter-spacing:.01em}
+.quien-title{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'Noto Sans','Helvetica Neue',sans-serif;font-weight:600;font-size:1.125rem;line-height:1.40;color:var(--text-primary);margin-bottom:.5rem}
+.quien-desc{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'Noto Sans','Helvetica Neue',sans-serif;font-weight:400;font-size:.8125rem;color:var(--text-secondary);line-height:1.50;letter-spacing:.01em}
 
 /* Diferenciadores strip */
 .ns-dif-strip{
@@ -1648,12 +1658,12 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
       <ul class="nav-links">
         <li><a href="#problema">Soluciones</a></li>
         <li><a href="#nosotros">Nosotros</a></li>
-        <li><a href="#productos">Precios</a></li>
+        <li><a href="#productos">Productos</a></li>
         <li><a href="#showcase-video">Visual</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
 
-      <a href="https://wa.me/5212221234567?text=Hola%2C%20quiero%20un%20diagnóstico%20gratuito" class="btn-primary nav-cta" target="_blank" rel="noopener">
+      <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20un%20diagnóstico%20gratuito" class="btn-primary nav-cta" target="_blank" rel="noopener">
         Diagnóstico gratuito
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -1667,10 +1677,10 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 <div class="mobile-menu" id="mobileMenu">
   <a href="#problema" onclick="closeMenu()">Soluciones</a>
   <a href="#nosotros" onclick="closeMenu()">Nosotros</a>
-  <a href="#productos" onclick="closeMenu()">Precios</a>
+  <a href="#productos" onclick="closeMenu()">Productos</a>
   <a href="#showcase-video" onclick="closeMenu()">Visual</a>
   <a href="#faq" onclick="closeMenu()">FAQ</a>
-  <a href="https://wa.me/5212221234567?text=Hola%2C%20quiero%20un%20diagnóstico%20gratuito" class="btn-primary" style="margin-top:.75rem;justify-content:center" target="_blank" rel="noopener">Diagnóstico gratuito →</a>
+  <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20un%20diagnóstico%20gratuito" class="btn-primary" style="margin-top:.75rem;justify-content:center" target="_blank" rel="noopener">Diagnóstico gratuito →</a>
 </div>
 
 <!-- ─── HERO — BLANCO ─── -->
@@ -1684,76 +1694,111 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
     <div class="hero-spot hero-spot-3"></div>
     <div class="hero-grid-lines"></div>
   </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
+   <script>
+     document.addEventListener("DOMContentLoaded", function() {
         const canvas = document.getElementById('hero-node-canvas');
-        if(!canvas) return;
+        if (!canvas) return;
         const ctx = canvas.getContext('2d');
-        let width, height;
+        /* ── Dimensiones lógicas (CSS px) del área visible ── */
+        let W = 0, H = 0;
         let nodes = [];
+        let animId;
+
+        /* ── Referencia al section #hero, no al padre inmediato ──
+           Así capturamos el tamaño real del recuadro completo,
+           independientemente de si hero-deco todavía no tiene altura. */
+        const heroSection = document.getElementById('hero') || canvas.closest('section') || canvas.parentElement;
+
+        /* ── DPR: resuelve el blur en pantallas Retina/HiDPI ── */
+        function getDpr() {
+            return Math.min(window.devicePixelRatio || 1, 2); // cap en 2x para rendimiento
+        }
 
         function resize() {
-            width = canvas.width = canvas.parentElement.offsetWidth;
-            height = canvas.height = canvas.parentElement.offsetHeight;
+            const dpr  = getDpr();
+            /* offsetWidth/Height sobre el section es siempre correcto
+               porque el section tiene min-height:100svh y display:flex */
+            W = heroSection.offsetWidth;
+            H = heroSection.offsetHeight;
+
+            /* Tamaño interno del buffer (físico) */
+            canvas.width  = Math.round(W * dpr);
+            canvas.height = Math.round(H * dpr);
+
+            /* El CSS ya pone width:100%; height:100% en el canvas,
+               pero lo forzamos también inline por si acaso */
+            canvas.style.width  = W + 'px';
+            canvas.style.height = H + 'px';
+
+            /* Escalar el contexto para que 1 unidad = 1 CSS px */
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            /* Reclamp nodos existentes para que no queden fuera del recuadro */
+            nodes.forEach(function(n) {
+                n.x = Math.min(Math.max(n.x, 0), W);
+                n.y = Math.min(Math.max(n.y, 0), H);
+            });
         }
-        window.addEventListener('resize', resize);
+
+        /* ── Clase Node (coordenadas siempre en CSS px) ── */
+        function Node() {
+            this.x      = Math.random() * W;
+            this.y      = Math.random() * H;
+            this.vx     = (Math.random() - 0.5) * 0.8;
+            this.vy     = (Math.random() - 0.5) * 0.8;
+            this.radius = Math.random() * 2 + 1.5;
+        }
+        Node.prototype.update = function() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > W) this.vx *= -1;
+            if (this.y < 0 || this.y > H) this.vy *= -1;
+        };
+        Node.prototype.draw = function() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#00ffcc';
+            ctx.fill();
+        };
+
+        /* ── Init resize + crear nodos ── */
         resize();
+        var numNodes = W > 768 ? 65 : 30;
+        for (var i = 0; i < numNodes; i++) { nodes.push(new Node()); }
 
-        class Node {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.8;
-                this.vy = (Math.random() - 0.5) * 0.8;
-                this.radius = Math.random() * 2 + 1.5;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if(this.x < 0 || this.x > width) this.vx *= -1;
-                if(this.y < 0 || this.y > height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = '#00ffcc';
-                ctx.fill();
-            }
-        }
-
-        // Determinar cantidad de nodos (menos en móviles para buen rendimiento)
-        const numNodes = window.innerWidth > 768 ? 65 : 30;
-        for(let i = 0; i < numNodes; i++) {
-            nodes.push(new Node());
-        }
-
+        /* ── Loop de animación ── */
         function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            for(let i = 0; i < nodes.length; i++) {
+            animId = requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, W, H);
+            for (var i = 0; i < nodes.length; i++) {
                 nodes[i].update();
                 nodes[i].draw();
-                
-                for(let j = i + 1; j < nodes.length; j++) {
-                    let dx = nodes[i].x - nodes[j].x;
-                    let dy = nodes[i].y - nodes[j].y;
-                    let dist = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if(dist < 150) {
+                for (var j = i + 1; j < nodes.length; j++) {
+                    var dx   = nodes[i].x - nodes[j].x;
+                    var dy   = nodes[i].y - nodes[j].y;
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(0, 255, 204, ${1 - dist/150})`;
-                        ctx.lineWidth = 0.6;
+                        ctx.strokeStyle = 'rgba(0,255,204,' + (1 - dist / 150) + ')';
+                        ctx.lineWidth   = 0.6;
                         ctx.moveTo(nodes[i].x, nodes[i].y);
                         ctx.lineTo(nodes[j].x, nodes[j].y);
                         ctx.stroke();
                     }
                 }
             }
-            requestAnimationFrame(animate);
         }
         animate();
+
+        /* ── ResizeObserver: captura cambios de tamaño del section
+           incluyendo rotación de pantalla, zoom del browser, etc. ── */
+        if (typeof ResizeObserver !== 'undefined') {
+            new ResizeObserver(function() { resize(); }).observe(heroSection);
+        } else {
+            window.addEventListener('resize', resize);
+        }
     });
-  </script>
+   </script>
   <div class="container" style="position:relative;z-index:1">
     <div class="hero-content">
       <div class="hero-overline reveal">
@@ -1771,12 +1816,12 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
       </p>
 
       <div class="hero-actions reveal reveal-d3">
-        <a href="https://wa.me/5212221234567?text=Hola%2C%20quiero%20un%20diagnóstico%20gratuito" class="btn-primary" target="_blank" rel="noopener" style="font-size:1rem;padding:.875rem 1.875rem">
+        <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20un%20diagnóstico%20gratuito" class="btn-primary" target="_blank" rel="noopener" style="font-size:1rem;padding:.875rem 1.875rem">
           Agenda tu diagnóstico — es gratis
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
         <a href="#productos" class="btn-secondary" style="font-size:1rem;padding:.875rem 1.875rem">
-          Ver precios
+          Ver productos
         </a>
       </div>
 
@@ -1804,7 +1849,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 
 <!-- ─── STATS BAR ─── -->
 <section id="stats" style="position: relative; overflow: hidden;">
-<!-- ANIMATION: Radar Sweep -->
+  <!-- ANIMATION: Radar Sweep -->
 <div class="anim-radar"></div>
 <style>
 .anim-radar {
@@ -1820,7 +1865,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 #stats > .container { position: relative; z-index: 1; }
 </style>
 
-<div class="container">
+  <div class="container">
     <div class="stats-grid">
       <div class="stat-item reveal">
         <div class="stat-num">5–18</div>
@@ -1848,7 +1893,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 
 <!-- ─── PROBLEMA → SOLUCIÓN ─── -->
 <section id="problema" style="position: relative; overflow: hidden;">
-<!-- ANIMATION: Warning Pulse -->
+  <!-- ANIMATION: Warning Pulse -->
 <div class="anim-warning-pulse"></div>
 <style>
 .anim-warning-pulse {
@@ -1867,7 +1912,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 #problema > .container { position: relative; z-index: 1; }
 </style>
 
-<div class="container">
+  <div class="container">
     <div class="section-header reveal">
       <div class="section-label">El problema que resolvemos</div>
       <h2 class="h2">Tu negocio merece una presencia profesional<br>desde el primer día — y herramientas que escalen contigo</h2>
@@ -1877,7 +1922,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 
 <!-- ─── PROCESO — indigo-50 gradient ─── -->
 <section id="proceso" style="position: relative; overflow: hidden;">
-<!-- CYBERPUNK DATA STREAMS -->
+  <!-- CYBERPUNK DATA STREAMS -->
 <div class="data-streams">
     <div class="stream" style="left: 15%; animation-duration: 4s; animation-delay: 0s;"></div>
     <div class="stream" style="left: 45%; animation-duration: 5s; animation-delay: 1.5s;"></div>
@@ -1938,11 +1983,9 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
     </div>
   </div>
 </section>
-
-<!-- ─── FEATURES — white ─── -->
 <!-- ─── NOSOTROS ─── -->
 <section id="nosotros" style="position: relative; overflow: hidden;">
-<!-- ANIMATION: Orbiting Rings -->
+  <!-- ANIMATION: Orbiting Rings -->
 <div class="anim-orbits">
     <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
     <div class="orbit orbit-2"><div class="orbit-dot"></div></div>
@@ -1974,7 +2017,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 #nosotros > .container { position: relative; z-index: 1; }
 </style>
 
-<div class="container">
+  <div class="container">
 
     <!-- ── ¿POR QUÉ NODE? — el origen del nombre ── -->
     <div class="section-header reveal">
@@ -2052,7 +2095,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
           El nodo tecnológico que <em>conecta tu negocio</em> con la digitalización.
         </div>
         <p class="ns-why-body">
-          En <strong>NODE</strong>  integramos tus procesos, generamos un sistema funcional y escalable. No importa si estás lanzando tu primer producto o si ya tienes operación establecida y quieres escalar. NODE es el nodo que te faltaba.
+          En <strong>NODE</strong> integramos tus procesos, generamos un sistema funcional y escalable. No importa si estás lanzando tu primer producto o si ya tienes operación establecida y quieres escalar. NODE es el nodo que te faltaba.
         </p>
         <div class="ns-pill-row">
           <span class="ns-pill">Velocidad real</span>
@@ -2062,30 +2105,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
         </div>
       </div>
     </div>
-
-    <!-- ── MISIÓN + VISIÓN ── -->
-    <hr class="ns-divider">
-    <div class="ns-sub-header reveal">
-      <span class="overline" style="color:var(--indigo)">Quiénes somos</span>
-      <h3 class="h3" style="margin-top:.5rem">Nuestra misión y visión</h3>
-    </div>
-    <div class="ns-mv-grid">
-      <div class="ns-mv-card mision reveal">
-        <div class="ns-mv-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        </div>
-        <div class="ns-mv-label">Misión</div>
-        <p class="ns-mv-text">Construir el software que tu negocio necesita para ejecutar su estrategia de crecimiento — con velocidad, precio transparente y proceso documentado desde el primer día.</p>
-      </div>
-      <div class="ns-mv-card vision reveal reveal-d1">
-        <div class="ns-mv-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </div>
-        <div class="ns-mv-label">Visión</div>
-        <p class="ns-mv-text">Ser referentes como empresa de servicios de software para impulsar el desarrollo tecnológico a nivel global — a través de la innovación y el impacto real en cada cliente.</p>
-      </div>
-    </div>
-
+    
     <!-- ── VALORES ── -->
     <hr class="ns-divider">
     <div class="ns-sub-header reveal">
@@ -2187,8 +2207,8 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
     </div>
 
   <!-- ─── FEATURES — white ─── -->
-  <section id="features" style="position: relative; overflow: hidden;">
-<!-- ANIMATION: Floating Tech Crosses -->
+   <section id="features" style="position: relative; overflow: hidden;">
+    <!-- ANIMATION: Floating Tech Crosses -->
 <div class="anim-crosses">
     <div class="cross" style="top: 20%; left: 10%; animation-delay: 0s;">+</div>
     <div class="cross" style="top: 70%; left: 80%; animation-delay: 2s;">+</div>
@@ -2214,7 +2234,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 #features > .container { position: relative; z-index: 1; }
 </style>
 
-<div class="container">
+  <div class="container">
     <div class="section-header reveal">
       <div class="section-label">Por qué NODE</div>
       <h2 class="h2">Lo que nos hace diferentes</h2>
@@ -2324,7 +2344,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 </style>
 
 <section id="productos" style="position: relative; overflow: hidden;">
-<!-- PREMIUM BACKGROUND BLOBS -->
+  <!-- PREMIUM BACKGROUND BLOBS -->
 <div class="premium-blobs-container">
     <div class="premium-blob blob-1"></div>
     <div class="premium-blob blob-2"></div>
@@ -2356,7 +2376,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
 
   <div class="container">
     <div class="section-header reveal">
-      <h2 class="h2">15 productos. 8 bundles. Una sola decisión.</h2>
+      <h2 class="h2">15 productos. 8 soluciones. Una sola decisión.</h2>
       <p>Desde una landing page hasta dashboards ejecutivos en tiempo real. Todos con precio transparente, proceso documentado y entrega garantizada.</p>
     </div>
 
@@ -2365,7 +2385,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
         <button class="tab-btn active" onclick="switchTab('ind',this)">Presencia digital</button>
         <button class="tab-btn" onclick="switchTab('pre',this)">Operación y ventas</button>
         <button class="tab-btn" onclick="switchTab('adv',this)"> Avanzados</button>  
-        <button class="tab-btn" onclick="switchTab('bun',this)">Bundles </button>
+        <button class="tab-btn" onclick="switchTab('bun',this)">Soluciones </button>
         <button class="tab-btn" onclick="switchTab('rec',this)">Recurrentes</button>  
       </div>
     </div>
@@ -2388,7 +2408,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Hosting 12 meses + 2 rondas de revisión</div>
             <div class="pf-row"><span class="pf-check">✓</span>Capacitación 30 min incluida</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P1%20Web%20Básica" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero ésta →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20Web%20Básica" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- P2 -->
@@ -2406,7 +2426,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>WhatsApp Business flotante + 3 rondas revisión</div>
             <div class="pf-row"><span class="pf-check">✓</span>Capacitación 60 min + manual PDF</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P2%20Web%20Premium" class="btn-card-main btn-cm-filled" target="_blank" rel="noopener">Quiero ésta →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%%20quiero%20Web%20Premium" class="btn-card-main btn-cm-filled" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
       </div>
       </div>
@@ -2429,7 +2449,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Catálogo interno hasta 100 productos</div>
             <div class="pf-row"><span class="pf-check">✓</span>Hasta 3 usuarios + dashboard de conversión</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P3%20Cotizador" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20Cotizador" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- P4 -->
@@ -2445,7 +2465,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Carrito + pedido con notificación por WhatsApp</div>
             <div class="pf-row"><span class="pf-check">✓</span>Panel de administración para gestión de productos</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P4%20Catálogo" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20Catálogo" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- P5 -->
@@ -2461,7 +2481,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Envío automático XML+PDF al receptor por email</div>
             <div class="pf-row"><span class="pf-check">✓</span>Cancelación incluida · historial exportable</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P5%20Facturador" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20Facturador" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- P6 -->
@@ -2477,7 +2497,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Dashboard de ventas + reportes exportables</div>
             <div class="pf-row"><span class="pf-check">✓</span>Hasta 5 usuarios con roles diferenciados</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P6%20CRM" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20CRM" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- P7 -->
@@ -2494,7 +2514,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Corte de caja diario por método de pago</div>
             <div class="pf-row"><span class="pf-check">✓</span>Modo offline básico con sincronización automática</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P7%20POS" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20POS" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
       </div>
     </div><!-- /tab-ind -->
@@ -2517,7 +2537,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Diagrama de flujo + manual de uso por automatización</div>
             <div class="pf-row"><span class="pf-check">✓</span>Capacitación 90 min incluida</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P8%20Automatiza" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20me%20quiero%20NODE%20Automatiza" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- P9 -->
@@ -2533,7 +2553,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Reportes programados en PDF/Excel automáticos</div>
             <div class="pf-row"><span class="pf-check">✓</span>Top 10 clientes, productos más vendidos, hora pico</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P9%20Analytics" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20Analytics" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- P10 -->
@@ -2549,7 +2569,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Calificación de leads + agendamiento Calendly/Google</div>
             <div class="pf-row"><span class="pf-check">✓</span>14 días de ajuste + historial exportable</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P10%20Asistente%20IA" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20Asistente%20IA" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
       </div>
 
@@ -2567,7 +2587,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Bitácora de accesos + audit trail exportable</div>
             <div class="pf-row"><span class="pf-check">✓</span>Respaldo automático diario/semanal · retención 30 días</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P11%20Seguridad" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%quiero%20NODE%20Seguridad" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- P12 -->
@@ -2583,7 +2603,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Hasta 5 pantallas funcionales definidas en brief</div>
             <div class="pf-row"><span class="pf-check">✓</span>Modo offline + notificaciones push (hasta 3 tipos)</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P12%20App" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero ésta →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20App" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
       </div>
 
@@ -2603,7 +2623,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Integración con API existente del cliente (hasta 5 endpoints)</div>
             <div class="pf-row"><span class="pf-check">✓</span>Skeleton screens + empty states + estados de error</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P13%20Front-end%20Corporativo" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20Front-end%20Corporativo" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- P14 -->
@@ -2621,7 +2641,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Dashboard por KAM: cuotas vs realizado + comisiones</div>
             <div class="pf-row"><span class="pf-check">✓</span>Hasta 10 usuarios · catálogo B2B hasta 200 ítems</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P14%20Portal%20KAM" class="btn-card-main btn-cm-filled" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20Portal%20KAM" class="btn-card-main btn-cm-filled" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- P15 -->
@@ -2639,7 +2659,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Vistas por rol: Dirección / Operaciones / Ventas</div>
             <div class="pf-row"><span class="pf-check">✓</span>Drill-down + historial 90 días + export a PDF/Excel</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20P15%20Dashboard%20Ejecutivo" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Quiero éste →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20Dashboard%20Ejecutivo" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
       </div>
 
@@ -2667,7 +2687,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             </div>
           </div>
           <div style="margin-top:1.75rem">
-            <a href="https://wa.me/5212221234567?text=Hola%2C%20quiero%20consultoría%20a%20la%20medida" class="btn-white" target="_blank" rel="noopener">Agendar diagnóstico →</a>
+            <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20consultoría%20a%20la%20medida" class="btn-white" target="_blank" rel="noopener">Agendar diagnóstico →</a>
           </div>
         </div>
       </div>
@@ -2683,11 +2703,11 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <span class="bundle-hero-dot"></span>
             La forma más inteligente de empezar
           </div>
-          <p class="bundle-hero-sub">Cada bundle está diseñado para un perfil de negocio real. No pagas por lo que no necesitas — y ahorras significativamente frente a contratar cada herramienta por separado.</p>
+          <p class="bundle-hero-sub">Cada solución está diseñada para un perfil de negocio real. No pagas por lo que no necesitas — y ahorras significativamente frente a contratar cada herramienta por separado.</p>
         </div>
         <div class="bundle-hero-right">
           <div class="bundle-stat-row">
-            <div class="bundle-stat"><span class="bundle-stat-num">8</span><span class="bundle-stat-label">bundles disponibles</span></div>
+            <div class="bundle-stat"><span class="bundle-stat-num">8</span><span class="bundle-stat-label">soluciones disponibles</span></div>
             <div class="bundle-stat"><span class="bundle-stat-num">~20%</span><span class="bundle-stat-label">ahorro promedio</span></div>
             <div class="bundle-stat"><span class="bundle-stat-num">5–22</span><span class="bundle-stat-label">días de entrega</span></div>
           </div>
@@ -2736,7 +2756,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               Al terminar tendrás
             </button>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20PROFESIONAL.%20Tenemos%20equipo%20de%20ventas%20y%20necesitamos%20CRM%2C%20cotizador%20y%20facturador." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Quiero →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20a%20Solucion%20PROFESIONAL.%20Tenemos%20equipo%20de%20ventas%20y%20queremos%20CRM%2C%20cotizador%20y%20facturador." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- LÍNEAS NUEVAS: Modal "Qué incluye" B1 -->
@@ -2749,7 +2769,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
                     Qué incluye
                   </div>
-                  <div class="bim-title">Bundle NODE ARRANCA</div>
+                  <div class="bim-title">Solución NODE ARRANCA</div>
                 </div>
               </div>
               <button class="bim-close" onclick="closeBIM('bim-b1-includes')" aria-label="Cerrar">✕</button>
@@ -2765,7 +2785,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               </div>
               <div class="bim-saving">
               </div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20Bundle%20B1%20ARRANCA." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20%20ARRANCA." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -2792,7 +2812,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Diseño coordinado:</strong> tu marca se ve igual en la web y en cada cotización</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Capacitación de 30 min</strong> para manejarlo tú mismo sin depender de nadie</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text">Entrega en <strong>8–10 días hábiles garantizados</strong> — no semanas de espera</div></div>
-             <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20PROFESIONAL." target="_blank" rel="noopener">Quiero →</a></div>
+             <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20PROFESIONAL." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -2829,7 +2849,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             </button>
           </div>
           <!-- FIN LÍNEAS NUEVAS botones B2 -->
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20VENDE%20M%C3%81S.%20Necesito%20web%2C%20cotizador%20y%20facturador%20CFDI." class="btn-card-main btn-cm-filled bundle-cta" target="_blank" rel="noopener">Quiero →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20VENDE%20M%C3%81S.%20Necesito%20web%2C%20cotizador%20y%20facturador%20CFDI." class="btn-card-main btn-cm-filled bundle-cta" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- LÍNEAS NUEVAS: Modal "Qué incluye" B2 -->
@@ -2842,7 +2862,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
                     Qué incluye
                   </div>
-                  <div class="bim-title">Bundle NODE VENDE MÁS ⭐</div>
+                  <div class="bim-title">Solución NODE VENDE MÁS ⭐</div>
                 </div>
               </div>
               <button class="bim-close" onclick="closeBIM('bim-b2-includes')" aria-label="Cerrar">✕</button>
@@ -2862,7 +2882,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               </div>
               <div class="bim-saving">
               </div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20VENDE%20M%C3%81S." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20VENDE%20M%C3%81S." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -2889,7 +2909,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>CFDI 4.0</strong> desde tu celular — 100 timbres incluidos, sin pagar contador</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Sin suscripciones mensuales</strong> eternas a plataformas de terceros</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text">Entrega en <strong>12–15 días hábiles</strong> — sin competidor directo en México a este precio</div></div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20PROFESIONAL." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20la%20solucion%20PROFESIONAL." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -2928,7 +2948,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             </button>
           </div>
           <!-- FIN LÍNEAS NUEVAS botones B3 -->
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20COMERCIO.%20Tengo%20una%20tienda%20con%20local%20y%20necesito%20presencia%20digital%20y%20control%20de%20caja." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Quiero  →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20COMERCIO.%20Tengo%20una%20tienda%20con%20local%20y%20quiero%20presencia%20digital%20y%20control%20de%20caja." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Lo quiero  →</a>
         </div>
 
         <!-- LÍNEAS NUEVAS: Modal "Qué incluye" B3 -->
@@ -2938,7 +2958,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-header-left">
                 <div>
                   <div class="bim-badge bim-badge-includes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg> Qué incluye</div>
-                  <div class="bim-title">Bundle NODE COMERCIO</div>
+                  <div class="bim-title">Solución NODE COMERCIO</div>
                 </div>
               </div>
               <button class="bim-close" onclick="closeBIM('bim-b3-includes')" aria-label="Cerrar">✕</button>
@@ -2949,7 +2969,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-item"><div class="bim-item-icon">💳</div><div><div class="bim-item-name">NODE POS</div><div class="bim-item-desc">Interfaz táctil · control de inventario · tickets WA · corte de caja diario · modo offline</div></div></div>
               <div class="bim-saving">
                </div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20COMERCIO." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20COMERCIO." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -2971,7 +2991,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Control de caja e inventario</strong> desde tu celular — sin cuadernos ni Excel</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Corte de caja diario</strong> por método de pago — efectivo, tarjeta y transferencia</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text">Entrega en <strong>12–16 días hábiles garantizados</strong></div></div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20PROFESIONAL." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20PROFESIONAL." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -3014,13 +3034,13 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             </button>
           </div>
           <!-- FIN LÍNEAS NUEVAS botones B4 -->
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20PROFESIONAL.%20Tenemos%20equipo%20de%20ventas%20y%20necesitamos%20CRM%2C%20cotizador%20y%20facturador." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Quiero →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20PROFESIONAL.%20Tenemos%20equipo%20de%20ventas%20y%20quiero%20CRM%2C%20cotizador%20y%20facturador." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- LÍNEAS NUEVAS: Modales B4 -->
         <div class="bim-overlay" id="bim-b4-includes" onclick="closeBIMOutside(event,this)">
           <div class="bim-panel">
-            <div class="bim-header"><div class="bim-header-left"><div><div class="bim-badge bim-badge-includes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg> Qué incluye</div><div class="bim-title">Bundle NODE PROFESIONAL</div></div></div><button class="bim-close" onclick="closeBIM('bim-b4-includes')" aria-label="Cerrar">✕</button></div>
+            <div class="bim-header"><div class="bim-header-left"><div><div class="bim-badge bim-badge-includes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg> Qué incluye</div><div class="bim-title">Solución NODE PROFESIONAL</div></div></div><button class="bim-close" onclick="closeBIM('bim-b4-includes')" aria-label="Cerrar">✕</button></div>
             <div class="bim-body">
               <div class="bim-item"><div class="bim-item-icon">✨</div><div><div class="bim-item-name">NODE Web Premium</div><div class="bim-item-desc">Sitio corporativo multi-sección, SEO, galería, hosting 12 meses</div></div></div>
               <div class="bim-item"><div class="bim-item-icon">📄</div><div><div class="bim-item-name">NODE Cotizador</div><div class="bim-item-desc">Catálogo de hasta 100 productos, PDF de marca, historial con estados</div></div></div>
@@ -3028,7 +3048,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-item"><div class="bim-item-icon">🤝</div><div><div class="bim-item-name">NODE CRM</div><div class="bim-item-desc">Pipeline Kanban · historial de interacciones · recordatorios · hasta 5 usuarios</div></div></div>
               <div class="bim-saving">
                </div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20PROFESIONAL." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20PROFESIONAL." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -3041,7 +3061,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Facturación CFDI directa</strong> — sin pagar $100 por factura al contador</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Hasta 5 usuarios</strong> con roles de admin, vendedor y solo lectura</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text">Entrega en <strong>15–18 días hábiles garantizados</strong></div></div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20PROFESIONAL." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20PROFESIONAL." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -3088,20 +3108,20 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             </button>
           </div>
           <!-- FIN LÍNEAS NUEVAS botones B5 -->
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20IA%20BUSINESS.%20Quiero%20automatizar%20la%20atenci%C3%B3n%20a%20prospectos%20las%2024%20horas." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Quiero →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20IA%20BUSINESS.%20Quiero%20automatizar%20la%20atenci%C3%%20a%20prospectos%20las%2024%20horas." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Quiero →</a>
         </div>
 
         <!-- LÍNEAS NUEVAS: Modales B5 -->
         <div class="bim-overlay" id="bim-b5-includes" onclick="closeBIMOutside(event,this)">
           <div class="bim-panel">
-            <div class="bim-header"><div class="bim-header-left"><div><div class="bim-badge bim-badge-includes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg> Qué incluye</div><div class="bim-title">Bundle NODE IA BUSINESS</div></div></div><button class="bim-close" onclick="closeBIM('bim-b5-includes')" aria-label="Cerrar">✕</button></div>
+            <div class="bim-header"><div class="bim-header-left"><div><div class="bim-badge bim-badge-includes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg> Qué incluye</div><div class="bim-title">Solución NODE IA BUSINESS</div></div></div><button class="bim-close" onclick="closeBIM('bim-b5-includes')" aria-label="Cerrar">✕</button></div>
             <div class="bim-body">
               <div class="bim-item"><div class="bim-item-icon">🌐</div><div><div class="bim-item-name">NODE Web Básica</div><div class="bim-item-desc">1-page mobile-first · WhatsApp flotante · SSL · hosting 12 meses</div></div></div>
               <div class="bim-item"><div class="bim-item-icon">🧠</div><div><div class="bim-item-name">NODE Asistente IA</div><div class="bim-item-desc">GPT-4o · base de conocimiento 50 FAQs · calificación de leads · transferencia a humano</div></div></div>
               <div class="bim-item"><div class="bim-item-icon">⚡</div><div><div class="bim-item-name">NODE Automatiza</div><div class="bim-item-desc">Hasta 3 flujos · Google Workspace · notificaciones automáticas · 90 min de capacitación</div></div></div>
               <div class="bim-saving">
               </div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20IA%20BUSINESS." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20IA%20BUSINESS." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -3114,7 +3134,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Notificación inmediata</strong> cuando llega un prospecto caliente a las 11pm</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Sin contratar personal extra</strong> para atención nocturna ni fines de semana</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text">Entrega en <strong>12–15 días hábiles garantizados</strong></div></div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20IA%20BUSINESS." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20IA%20BUSINESS." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -3147,20 +3167,20 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             </button>
           </div>
           <!-- FIN LÍNEAS NUEVAS botones B6 -->
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20VENTAS%20INTELIGENTES.%20Tengo%20equipo%20de%20KAMs%20y%20necesito%20control%20de%20cotizaciones%20y%20pipeline." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Quiero →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20VENTAS%20INTELIGENTES.%20Tengo%20equipo%20de%20KAMs%20y%20quiero%20control%20de%20cotizaciones%20y%20pipeline." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Lo quiero →</a>
         </div>
 
         <!-- LÍNEAS NUEVAS: Modales B6 -->
         <div class="bim-overlay" id="bim-b6-includes" onclick="closeBIMOutside(event,this)">
           <div class="bim-panel">
-            <div class="bim-header"><div class="bim-header-left"><div><div class="bim-badge bim-badge-includes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg> Qué incluye</div><div class="bim-title">Bundle NODE VENTAS INTELIGENTES</div></div></div><button class="bim-close" onclick="closeBIM('bim-b6-includes')" aria-label="Cerrar">✕</button></div>
+            <div class="bim-header"><div class="bim-header-left"><div><div class="bim-badge bim-badge-includes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg> Qué incluye</div><div class="bim-title">Solución NODE VENTAS INTELIGENTES</div></div></div><button class="bim-close" onclick="closeBIM('bim-b6-includes')" aria-label="Cerrar">✕</button></div>
             <div class="bim-body">
               <div class="bim-item"><div class="bim-item-icon">✨</div><div><div class="bim-item-name">Web Premium + Cotizador</div><div class="bim-item-desc">Sitio corporativo · cotizador con control de tope de descuentos por rol</div></div></div>
               <div class="bim-item"><div class="bim-item-icon">🏆</div><div><div class="bim-item-name">NODE Portal KAM & Ventas</div><div class="bim-item-desc">Pricing progresivo por volumen · simulador de 3 escenarios · cálculo de comisiones · audit trail</div></div></div>
               <div class="bim-item"><div class="bim-item-icon">🤝</div><div><div class="bim-item-name">NODE CRM</div><div class="bim-item-desc">Pipeline Kanban B2B · historial de interacciones · reportes de pipeline · hasta 5 usuarios</div></div></div>
               <div class="bim-saving">
                 </div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20VENTAS%20INTELIGENTES." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20VENTAS%20INTELIGENTES." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -3173,7 +3193,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Simulador de 3 escenarios</strong> de propuesta en tiempo real para cada cliente</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Dashboard: cuota vs. realizado</strong> por cada vendedor del equipo</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text">Entrega en <strong>18–22 días hábiles garantizados</strong></div></div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20VENTAS%20INTELIGENTES." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20VENTAS%20INTELIGENTES." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -3217,13 +3237,13 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             </button>
           </div>
           <!-- FIN LÍNEAS NUEVAS botones B7 -->
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20DIGITAL%20360.%20Quiero%20digitalizar%20toda%20mi%20operaci%C3%B3n%20desde%20el%20inicio." class="btn-card-main btn-cm-filled bundle-cta" target="_blank" rel="noopener">Quiero →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20DIGITAL%20360.%20Quiero%20digitalizar%20toda%20mi%20operaci%C3%B3n%20desde%20el%20inicio." class="btn-card-main btn-cm-filled bundle-cta" target="_blank" rel="noopener">Quiero →</a>
         </div>
 
         <!-- LÍNEAS NUEVAS: Modales B7 -->
         <div class="bim-overlay" id="bim-b7-includes" onclick="closeBIMOutside(event,this)">
           <div class="bim-panel">
-            <div class="bim-header"><div class="bim-header-left"><div><div class="bim-badge bim-badge-includes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg> Qué incluye</div><div class="bim-title">Bundle NODE DIGITAL 360</div></div></div><button class="bim-close" onclick="closeBIM('bim-b7-includes')" aria-label="Cerrar">✕</button></div>
+            <div class="bim-header"><div class="bim-header-left"><div><div class="bim-badge bim-badge-includes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg> Qué incluye</div><div class="bim-title">Solución NODE DIGITAL 360</div></div></div><button class="bim-close" onclick="closeBIM('bim-b7-includes')" aria-label="Cerrar">✕</button></div>
             <div class="bim-body">
               <div class="bim-item"><div class="bim-item-icon">✨</div><div><div class="bim-item-name">NODE Web Premium</div><div class="bim-item-desc">Presencia digital de alto impacto, SEO, galería, hosting 12 meses</div></div></div>
               <div class="bim-item"><div class="bim-item-icon">🧠</div><div><div class="bim-item-name">NODE Asistente IA</div><div class="bim-item-desc">Entrenado con tu negocio · calificación de leads · agendamiento · transferencia humana</div></div></div>
@@ -3231,7 +3251,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-item"><div class="bim-item-icon">📊</div><div><div class="bim-item-name">NODE Analytics</div><div class="bim-item-desc">10 KPIs · 3 fuentes · 8 gráficas · reportes PDF/Excel · top productos y hora pico</div></div>></div>
               <div class="bim-saving">
                 </div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20DIGITAL%20360." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20DIGITAL%20360." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -3244,7 +3264,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Automatizaciones en background</strong> — tareas repetitivas que se procesan solas</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Dashboard ejecutivo</strong> con tus KPIs más importantes en una sola pantalla</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text">Entrega en <strong>16–20 días hábiles garantizados</strong></div></div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20el%20Bundle%20DIGITAL%20360." target="_blank" rel="noopener">Quiero →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20NODE%20DIGITAL%20360." target="_blank" rel="noopener">Lo quiero →</a></div>
             </div>
           </div>
         </div>
@@ -3285,21 +3305,21 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             </button>
           </div>
           <!-- FIN LÍNEAS NUEVAS botones B8 -->
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20el%20Bundle%20ENTERPRISE%20para%20mi%20empresa." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Solicitar diagnóstico Enterprise →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20informaci%C3%n%20sobre%20NODE%20ENTERPRISE%20para%20mi%20empresa." class="btn-card-main btn-cm-outline bundle-cta" target="_blank" rel="noopener">Solicitar diagnóstico Enterprise →</a>
           <div class="bundle-urgency" style="border-color:var(--indigo-200);color:var(--indigo)">Diagnóstico gratuito de 30 min — sin compromiso</div>
         </div>
 
         <!-- LÍNEAS NUEVAS: Modales B8 -->
         <div class="bim-overlay" id="bim-b8-includes" onclick="closeBIMOutside(event,this)">
           <div class="bim-panel">
-            <div class="bim-header"><div class="bim-header-left"><div><div class="bim-badge bim-badge-includes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg> Qué incluye</div><div class="bim-title">Bundle NODE ENTERPRISE</div></div></div><button class="bim-close" onclick="closeBIM('bim-b8-includes')" aria-label="Cerrar">✕</button></div>
+            <div class="bim-header"><div class="bim-header-left"><div><div class="bim-badge bim-badge-includes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="14" height="14" rx="2"/><path d="M5 7H3a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg> Qué incluye</div><div class="bim-title">Solución NODE ENTERPRISE</div></div></div><button class="bim-close" onclick="closeBIM('bim-b8-includes')" aria-label="Cerrar">✕</button></div>
             <div class="bim-body">
               <div class="bim-item"><div class="bim-item-icon">✨</div><div><div class="bim-item-name">Web Premium + Cotizador + Facturador</div><div class="bim-item-desc">Presencia corporativa · cotizaciones profesionales · CFDI 4.0 — módulos obligatorios</div></div><div class="bim-item-price">obligatorio</div></div>
               <div class="bim-item"><div class="bim-item-icon">🤝</div><div><div class="bim-item-name">CRM + Analytics en tiempo real</div><div class="bim-item-desc">Pipeline de ventas · KPIs con alertas · reportes automáticos — módulos obligatorios</div></div><div class="bim-item-price">obligatorio</div></div>
               <div class="bim-item"><div class="bim-item-icon">🔐</div><div><div class="bim-item-name">Seguridad & Gobernanza</div><div class="bim-item-desc">Roles y permisos · MFA · bitácora de accesos · backups automáticos — módulo obligatorio</div></div><div class="bim-item-price">obligatorio</div></div>
               <div class="bim-item"><div class="bim-item-icon">➕</div><div><div class="bim-item-name">Módulos adicionales</div><div class="bim-item-desc">POS · App PWA · Asistente IA · Portal KAM · Dashboard Ejecutivo — según diagnóstico</div></div><div class="bim-item-price">variable</div></div>
-              <div class="bim-saving"><span class="bim-saving-label">Precio base estimado — scope en diagnóstico</span><span class="bim-saving-amount"></span></div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20el%20Bundle%20ENTERPRISE." target="_blank" rel="noopener">Solicitar diagnóstico Enterprise →</a></div>
+              <div class="bim-saving"><span class="bim-saving-amount"></span></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20informaci%C3%%20sobre%20NODE%20ENTERPRISE." target="_blank" rel="noopener">Solicitar diagnóstico Enterprise →</a></div>
             </div>
           </div>
         </div>
@@ -3312,7 +3332,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Precio transparente</strong> — lo que se cotiza es lo que se cobra, sin sorpresas</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Diagnóstico gratuito de 30 min</strong> antes de comprometerte a nada</div></div>
               <div class="bim-outcome-item"><div class="bim-outcome-check">✓</div><div class="bim-outcome-text"><strong>Soporte real</strong> por WhatsApp — respuesta el mismo día hábil post-entrega</div></div>
-              <div class="bim-cta"><a href="https://wa.me/5212221234567?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20el%20Bundle%20ENTERPRISE." target="_blank" rel="noopener">Solicitar diagnóstico Enterprise →</a></div>
+              <div class="bim-cta"><a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20NODE%20ENTERPRISE." target="_blank" rel="noopener">Solicitar diagnóstico Enterprise →</a></div>
             </div>
           </div>
         </div>
@@ -3324,8 +3344,8 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
       <div class="bundle-footer-note reveal">
         <div class="bundle-footer-icon">💡</div>
         <div>
-          <strong>¿No estás seguro cuál bundle es para ti?</strong> El diagnóstico gratuito de 20 min resuelve exactamente eso. Te escuchamos, entendemos tu operación y te decimos qué tiene sentido contratar — sin presión ni relleno.
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20quiero%20un%20diagn%C3%B3stico%20gratuito%20para%20saber%20qu%C3%A9%20bundle%20me%20conviene." target="_blank" rel="noopener" style="color:var(--indigo);font-weight:600;text-decoration:none;margin-left:.375rem">Agendar ahora →</a>
+          <strong>¿No estás seguro cuál solución es para ti?</strong> El diagnóstico gratuito de 20 min resuelve exactamente eso. Te escuchamos, entendemos tu operación y te decimos qué tiene sentido contratar — sin presión ni relleno.
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20un%20diagn%C3%B3ostico%20gratuito%20para%20saber%20qu%C3%A9%20soluci%C3%B3n%20me%20conviene." target="_blank" rel="noopener" style="color:var(--indigo);font-weight:600;text-decoration:none;margin-left:.375rem">Agendar ahora →</a>
         </div>
       </div>
 
@@ -3349,7 +3369,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Monitoreo de uptime + seguridad del servidor</div>
             <div class="pf-row"><span class="pf-check">✓</span>Soporte WhatsApp en horario hábil</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20Mantenimiento%20R1" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Me interesa →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20Mantenimiento%20" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Me interesa →</a>
         </div>
 
         <!-- R2 -->
@@ -3366,7 +3386,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Backups semanales + reporte mensual analytics</div>
             <div class="pf-row"><span class="pf-check">✓</span>Soporte prioritario el mismo día hábil</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20Mantenimiento%20R2" class="btn-card-main btn-cm-filled" target="_blank" rel="noopener">Me interesa →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20me%20interesa%20Mantenimiento%20" class="btn-card-main btn-cm-filled" target="_blank" rel="noopener">Me interesa →</a>
         </div>
 
         <!-- R3 -->
@@ -3381,7 +3401,7 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Estrategia digital o capacitación en el sistema</div>
             <div class="pf-row"><span class="pf-check">✓</span>Grabación de cada sesión incluida</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20Acompañamiento%20R3" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Me interesa →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20Acompañamiento%20" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Me interesa →</a>
         </div>
 
         <!-- R4 -->
@@ -3396,33 +3416,380 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
             <div class="pf-row"><span class="pf-check">✓</span>Prueba en sandbox + certificación antes de producción</div>
             <div class="pf-row"><span class="pf-check">✓</span>Documentación del cambio incluida</div>
           </div>
-          <a href="https://wa.me/5212221234567?text=Hola%2C%20me%20interesa%20Actualización%20CFDI%20R4" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Me interesa →</a>
+          <a href="https://wa.me/527751023249?text=Hola%2C%20quiero%20Actualización%20CFDI%20" class="btn-card-main btn-cm-outline" target="_blank" rel="noopener">Me interesa →</a>
         </div>
       </div>
     </div><!-- /tab-rec -->
 
 <!-- ─── VIDEO GRÁFICAS / EXPERIENCIA ─── -->
-<!-- ─── TESTIMONIOS ─── -->
-<!-- ─── FAQ — indigo-50 ─── -->
-<section id="faq" style="position: relative; overflow: hidden;">
-<!-- ANIMATION: FAQ Wave -->
-<div class="anim-wave"></div>
-<style>
-.anim-wave {
-    position: absolute; bottom: -50px; left: -50%;
-    width: 200%; height: 300px;
-    background: radial-gradient(ellipse at center, rgba(100, 50, 255, 0.25) 0%, transparent 60%);
-    animation: waveMove 6s infinite alternate ease-in-out;
-    pointer-events: none; z-index: 0;
+ <!-- ─── FEATURES — white ─── -->
+ <section id="showcase-video">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label teal">Experiencia visual</div>
+      <h2 class="h2">Visualiza tus gráficas y módulos en movimiento</h2>
+      <p>Mantenemos tus metricas de manera eficiente y con buenos resultados.</p>
+    </div>
+    <div class="showcase-shell reveal reveal-d1">
+      <div class="showcase-video">
+        <video autoplay muted loop playsinline preload="metadata" class="showcase-video__media">
+        </video>
+
+        <style>
+/* ── DASHBOARD INTERACTIVO — contenido 100% dentro del recuadro showcase ── */
+
+/* Dimensiones base del "diseño de referencia" de la tableta (no cambian) */
+:root {
+  --tablet-w: 850px;
+  --tablet-h: 550px;
 }
-@keyframes waveMove {
-    0% { transform: translateX(0) scaleY(1); opacity: 0.5; }
-    100% { transform: translateX(10%) scaleY(2); opacity: 1; }
+
+.interactive-dash-section {
+    /* Ocupa exactamente el recuadro showcase, sin overflow */
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #050508;
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(0,255,204,0.13) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(100,50,255,0.09) 0%, transparent 50%);
+    box-sizing: border-box;
 }
-#faq > .container { position: relative; z-index: 1; }
+
+.interactive-dash-section * { box-sizing: border-box; }
+
+/* Vista principal: llena todo el espacio disponible */
+.idash-main-view {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+    perspective: 1500px;
+    cursor: grab;
+    overflow: hidden;
+}
+.idash-main-view:active { cursor: grabbing; }
+
+/* ── Tableta: tamaño fijo en su "espacio de diseño".
+   El JS aplica un scale() calculado para que quede dentro del recuadro. ── */
+.idash-tablet-container {
+    /* posición: centrada via flex del padre, el JS NO necesita marginLeft/Top */
+    width: var(--tablet-w);
+    height: var(--tablet-h);
+    flex-shrink: 0;          /* evita que flex la comprima antes del scale */
+    border-radius: 35px;
+    background: #111;
+    box-shadow: 
+        0 0 0 10px #222,
+        0 0 0 12px #444,
+        0 0 0 14px #111,
+        30px 40px 60px rgba(0,0,0,.8),
+        -10px -10px 30px rgba(0,255,204,.1);
+    transform-style: preserve-3d;
+    user-select: none;
+    /* La transición es sólo para parallax/drag — el scale inicial es instantáneo */
+    transition: transform 0.1s ease-out;
+    transform-origin: center center;
+}
+
+.idash-tablet-container::before {
+    content: '';
+    position: absolute;
+    left: -15px; top: 50%;
+    transform: translateY(-50%);
+    width: 8px; height: 8px;
+    background: #050510;
+    border-radius: 50%;
+    box-shadow: inset 0 0 2px rgba(255,255,255,.4);
+    z-index: 100;
+}
+
+.idash-tablet-screen {
+    position: absolute;
+    inset: 0;
+    border-radius: 25px;
+    background-color: #000;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #0a0a0a;
+}
+
+.idash-image-wrapper {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.idash-screen-image {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    animation: panDashboard 25s infinite alternate ease-in-out;
+    transform-origin: center center;
+}
+.idash-screen-image.loaded { opacity: 1; }
+
+@keyframes panDashboard {
+    0%   { transform: scale(1.1) translate(0%,0%); }
+    25%  { transform: scale(1.2) translate(-3%,-2%); }
+    50%  { transform: scale(1.15) translate(2%,3%); }
+    75%  { transform: scale(1.2) translate(3%,-3%); }
+    100% { transform: scale(1.1) translate(0%,0%); }
+}
+
+.idash-tech-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    z-index: 10;
+}
+
+.idash-scanner-line {
+    position: absolute;
+    width: 100%; height: 2px;
+    background: #00ffcc;
+    box-shadow: 0 0 20px 4px rgba(0,255,204,.5);
+    opacity: .5;
+    animation: scanTablet 4s linear infinite;
+}
+@keyframes scanTablet {
+    0%   { top: -10%; opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { top: 110%; opacity: 0; }
+}
+
+.idash-data-point {
+    position: absolute;
+    width: 10px; height: 10px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 15px 5px rgba(0,255,204,.5);
+    animation: pulseData 2s infinite alternate;
+}
+.idash-dp1 { top: 30%; left: 40%; animation-delay: 0s; }
+.idash-dp2 { top: 60%; left: 70%; animation-delay: .5s; }
+.idash-dp3 { top: 20%; left: 80%; animation-delay: 1s; }
+
+@keyframes pulseData {
+    0%   { transform: scale(.5);  opacity: .3; }
+    100% { transform: scale(1.5); opacity: .9; }
+}
+
+.idash-app-header {
+    position: absolute;
+    top: 0; left: 0; width: 100%;
+    padding: 15px 25px;
+    background: linear-gradient(to bottom, rgba(0,0,0,.9), transparent);
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+}
+.idash-app-title {
+    font-size: 16px; font-weight: 600;
+    letter-spacing: 1px; color: #00ffcc;
+    text-shadow: 0 2px 5px rgba(0,0,0,.8);
+}
+
+.idash-loader {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 50px; height: 50px;
+    border: 4px solid rgba(0,255,204,.1);
+    border-top-color: #00ffcc;
+    border-radius: 50%;
+    animation: spin 1s infinite linear;
+    display: none;
+    z-index: 50;
+}
+@keyframes spin { 100% { transform: translate(-50%,-50%) rotate(360deg); } }
 </style>
 
-<div class="container">
+<section id="interactive-dashboard" class="interactive-dash-section">
+    <main class="idash-main-view" id="idashMainView">
+        <div class="idash-tablet-container" id="idashTablet">
+            <div class="idash-tablet-screen">
+                <div class="idash-app-header">
+                    <span class="idash-app-title" id="idashAppTitle">Cargando...</span>
+                    <span style="font-size:13px;font-weight:bold;color:#fff;">100% 🔋</span>
+                </div>
+                <div class="idash-image-wrapper">
+                    <img src="../img1.png" class="idash-screen-image loaded" id="idashDisplayImage">
+                </div>
+                <div class="idash-tech-overlay">
+                    <div class="idash-scanner-line"></div>
+                    <div class="idash-data-point idash-dp1"></div>
+                    <div class="idash-data-point idash-dp2"></div>
+                    <div class="idash-data-point idash-dp3"></div>
+                </div>
+                <div class="idash-loader" id="idashLoader"></div>
+            </div>
+        </div>
+    </main>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    /* ── Constantes de diseño (no cambiar) ── */
+    var TABLET_W = 850;
+    var TABLET_H = 550;
+    /* Padding interno del recuadro para que la tableta no toque los bordes */
+    var PADDING  = 40;
+
+    var imagesList = [
+        { src: '../img1.png', title: 'Dashboard Principal' },
+        { src: '../img2.png', title: 'Módulo de CRM' },
+        { src: '../img3.png', title: 'Analítica Avanzada' },
+        { src: '../img4.png', title: 'Reporte de Operaciones' },
+        { src: '../img5.png', title: 'Flujo Financiero' },
+        { src: '../img6.png', title: 'Métricas de Marketing' },
+        { src: '../img7.png', title: 'Rendimiento Global' },
+        { src: '../img8.png', title: 'Configuración del Sistema' }
+    ];
+
+    var currentIndex = 0;
+    var imgElement   = document.getElementById('idashDisplayImage');
+    var loader       = document.getElementById('idashLoader');
+    var titleEl      = document.getElementById('idashAppTitle');
+    var mainView     = document.getElementById('idashMainView');
+    var tablet       = document.getElementById('idashTablet');
+    /* El recuadro contenedor real es .showcase-video */
+    var showcaseBox  = document.querySelector('.showcase-video') || mainView;
+
+    if (!tablet || !mainView) return;
+
+    titleEl.textContent = imagesList[0].title;
+
+    /* ── 1. ESCALA ADAPTATIVA ──────────────────────────────────────────
+       Calcula el scale para que la tableta (850×550) quepa dentro del
+       recuadro showcase-video con un margen de PADDING px a cada lado.
+       Se ejecuta al inicio y en cada cambio de tamaño del recuadro.    */
+    var baseScale   = 1;
+    var parallaxRX  = 0;
+    var parallaxRY  = 0;
+    var dragOffsetX = 0;
+    var dragOffsetY = 0;
+
+    function applyTransform() {
+        tablet.style.transform =
+            'scale(' + baseScale + ') ' +
+            'rotateX(' + parallaxRX + 'deg) ' +
+            'rotateY(' + parallaxRY + 'deg) ' +
+            'translate(' + (dragOffsetX / baseScale) + 'px, ' +
+                           (dragOffsetY / baseScale) + 'px)';
+    }
+
+    function fitTablet() {
+        var boxW = showcaseBox.offsetWidth  || mainView.offsetWidth  || 800;
+        var boxH = showcaseBox.offsetHeight || mainView.offsetHeight || 420;
+        var scaleX = (boxW - PADDING * 2) / TABLET_W;
+        var scaleY = (boxH - PADDING * 2) / TABLET_H;
+        baseScale   = Math.min(scaleX, scaleY, 1); /* cap a 1 — no ampliar más del 100% */
+        dragOffsetX = 0;
+        dragOffsetY = 0;
+        applyTransform();
+    }
+
+    fitTablet();
+
+    /* ResizeObserver sobre showcaseBox para reaccionar a cualquier cambio */
+    if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(fitTablet).observe(showcaseBox);
+    } else {
+        window.addEventListener('resize', fitTablet);
+    }
+
+    /* ── 2. ROTACIÓN DE IMÁGENES ───────────────────────────────────── */
+    function nextImage() {
+        currentIndex = (currentIndex + 1) % imagesList.length;
+        var item = imagesList[currentIndex];
+        imgElement.classList.remove('loaded');
+        loader.style.display = 'block';
+        setTimeout(function() {
+            imgElement.src = item.src;
+            titleEl.textContent = item.title;
+            document.querySelectorAll('.idash-data-point').forEach(function(dp) {
+                dp.style.top  = (20 + Math.random() * 60) + '%';
+                dp.style.left = (20 + Math.random() * 60) + '%';
+            });
+            imgElement.onload = function() {
+                loader.style.display = 'none';
+                imgElement.classList.add('loaded');
+            };
+        }, 400);
+    }
+    setInterval(nextImage, 4000);
+
+    /* ── 3. PARALLAX + DRAG ────────────────────────────────────────── */
+    var isDragging = false;
+    var startMouseX, startMouseY;
+
+    mainView.addEventListener('mousedown', function(e) {
+        isDragging  = true;
+        startMouseX = e.clientX - dragOffsetX;
+        startMouseY = e.clientY - dragOffsetY;
+        tablet.style.transition = 'none';
+    });
+
+    window.addEventListener('mouseup', function() {
+        if (!isDragging) return;
+        isDragging = false;
+        tablet.style.transition = 'transform 0.1s ease-out';
+    });
+
+    mainView.addEventListener('mousemove', function(e) {
+        if (isDragging) {
+            dragOffsetX = e.clientX - startMouseX;
+            dragOffsetY = e.clientY - startMouseY;
+        }
+        /* Parallax relativo al centro de mainView */
+        var rect    = mainView.getBoundingClientRect();
+        var cx      = rect.left + rect.width  / 2;
+        var cy      = rect.top  + rect.height / 2;
+        parallaxRX  = +((cy - e.clientY) / 35).toFixed(2);
+        parallaxRY  = +((e.clientX - cx) / 35).toFixed(2);
+        applyTransform();
+    });
+
+    mainView.addEventListener('mouseleave', function() {
+        if (!isDragging) {
+            tablet.style.transition = 'transform 0.5s cubic-bezier(0.2,0.8,0.2,1)';
+            parallaxRX = 0;
+            parallaxRY = 0;
+            applyTransform();
+        }
+    });
+
+    mainView.addEventListener('mouseenter', function() {
+        tablet.style.transition = 'transform 0.1s ease-out';
+    });
+});
+</script>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ─── FAQ — indigo-50 ─── -->
+<section id="faq">
+  <div class="container">
     <div class="section-header reveal">
       <div class="section-label">Preguntas frecuentes</div>
       <h2 class="h2">Todo lo que necesitas saber</h2>
@@ -3486,361 +3853,6 @@ body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,'No
   </div>
 </section>
 
-<!-- ─── INTERACTIVE DASHBOARD SECTION ─── -->
-<style>
-/* SCOPED CSS FOR INTERACTIVE DASHBOARD */
-.interactive-dash-section {
-    display: flex;
-    height: 90vh;
-    min-height: 700px;
-    background-color: #050508;
-    color: #fff;
-    font-family: 'Inter', sans-serif;
-    position: relative;
-    overflow: hidden;
-    background-image: 
-        radial-gradient(circle at 50% 0%, rgba(0, 255, 204, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 100% 100%, rgba(100, 50, 255, 0.1) 0%, transparent 50%);
-}
-
-.interactive-dash-section * {
-    box-sizing: border-box;
-}
-
-/* MAIN CONTAINER (CENTERED) */
-.idash-main-view {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    width: 100%;
-    background-image: 
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 50px 50px;
-    perspective: 1500px;
-    cursor: grab; /* Indicador de que se puede mover */
-}
-
-.idash-main-view:active {
-    cursor: grabbing;
-}
-
-/* TABLET CONTAINER */
-.idash-tablet-container {
-    position: absolute; /* Para permitir moverla libremente */
-    width: 850px;
-    height: 550px;
-    border-radius: 35px;
-    background: #111;
-    box-shadow: 
-        0 0 0 10px #222,
-        0 0 0 12px #444,
-        0 0 0 14px #111,
-        30px 40px 60px rgba(0,0,0,0.8),
-        -10px -10px 30px rgba(0, 255, 204, 0.1);
-    transition: transform 0.1s ease-out;
-    transform-style: preserve-3d;
-    user-select: none;
-}
-
-.idash-tablet-container::before {
-    content: '';
-    position: absolute;
-    left: -15px; 
-    top: 50%;
-    transform: translateY(-50%);
-    width: 8px;
-    height: 8px;
-    background: #050510;
-    border-radius: 50%;
-    box-shadow: inset 0 0 2px rgba(255,255,255,0.4);
-    z-index: 100;
-}
-
-.idash-tablet-screen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 25px; 
-    background-color: #000;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    border: 2px solid #0a0a0a;
-}
-
-.idash-image-wrapper {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-    pointer-events: none;
-}
-
-.idash-screen-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    animation: panDashboard 25s infinite alternate ease-in-out;
-    transform-origin: center center;
-}
-
-.idash-screen-image.loaded {
-    opacity: 1;
-}
-
-@keyframes panDashboard {
-    0% { transform: scale(1.1) translate(0%, 0%); }
-    25% { transform: scale(1.2) translate(-3%, -2%); }
-    50% { transform: scale(1.15) translate(2%, 3%); }
-    75% { transform: scale(1.2) translate(3%, -3%); }
-    100% { transform: scale(1.1) translate(0%, 0%); }
-}
-
-.idash-tech-overlay {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-    mix-blend-mode: screen;
-    z-index: 10;
-}
-
-.idash-scanner-line {
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background: #00ffcc;
-    box-shadow: 0 0 20px 4px rgba(0, 255, 204, 0.5);
-    opacity: 0.5;
-    animation: scanTablet 4s linear infinite;
-}
-
-@keyframes scanTablet {
-    0% { top: -10%; opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { top: 110%; opacity: 0; }
-}
-
-.idash-data-point {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 15px 5px rgba(0, 255, 204, 0.5);
-    animation: pulseData 2s infinite alternate;
-}
-.idash-dp1 { top: 30%; left: 40%; animation-delay: 0s; }
-.idash-dp2 { top: 60%; left: 70%; animation-delay: 0.5s; }
-.idash-dp3 { top: 20%; left: 80%; animation-delay: 1s; }
-
-@keyframes pulseData {
-    0% { transform: scale(0.5); opacity: 0.3; }
-    100% { transform: scale(1.5); opacity: 0.9; }
-}
-
-.idash-app-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 15px 25px;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
-    z-index: 20;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    pointer-events: none;
-}
-
-.idash-app-title {
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: #00ffcc;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.8);
-}
-
-.idash-loader {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50px; height: 50px;
-    border: 4px solid rgba(0,255,204,0.1);
-    border-top-color: #00ffcc;
-    border-radius: 50%;
-    animation: spin 1s infinite linear;
-    display: none;
-    z-index: 50;
-}
-
-@media (max-width: 900px) {
-    .interactive-dash-section {
-        height: auto;
-        min-height: 500px;
-        padding: 40px 0;
-    }
-    .idash-tablet-container {
-        transform: scale(0.4) !important;
-        position: relative;
-    }
-}
-</style>
-
-<section id="interactive-dashboard" class="interactive-dash-section">
-    <!-- Vista Principal (Sin Sidebar) -->
-    <main class="idash-main-view" id="idashMainView">
-        <div class="idash-tablet-container" id="idashTablet">
-            <div class="idash-tablet-screen">
-                <div class="idash-app-header">
-                    <span class="idash-app-title" id="idashAppTitle">Cargando...</span>
-                    <span style="font-size: 13px; font-weight: bold; color: #fff;">100% 🔋</span>
-                </div>
-                
-                <div class="idash-image-wrapper">
-                    <img src="../img1.png" class="idash-screen-image loaded" id="idashDisplayImage">
-                </div>
-                
-                <div class="idash-tech-overlay">
-                    <div class="idash-scanner-line"></div>
-                    <div class="idash-data-point idash-dp1"></div>
-                    <div class="idash-data-point idash-dp2"></div>
-                    <div class="idash-data-point idash-dp3"></div>
-                </div>
-
-                <div class="idash-loader" id="idashLoader"></div>
-            </div>
-        </div>
-    </main>
-</section>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const imagesList = [
-        { src: '../img1.png', title: 'Dashboard Principal' },
-        { src: '../img2.png', title: 'Módulo de CRM' },
-        { src: '../img3.png', title: 'Analítica Avanzada' },
-        { src: '../img4.png', title: 'Reporte de Operaciones' },
-        { src: '../img5.png', title: 'Flujo Financiero' },
-        { src: '../img6.png', title: 'Métricas de Marketing' },
-        { src: '../img7.png', title: 'Rendimiento Global' },
-        { src: '../img8.png', title: 'Configuración del Sistema' }
-    ];
-
-    let currentIndex = 0;
-    const imgElement = document.getElementById('idashDisplayImage');
-    const loader = document.getElementById('idashLoader');
-    const titleEl = document.getElementById('idashAppTitle');
-    
-    // Configurar la primera imagen
-    titleEl.textContent = imagesList[0].title;
-
-    function nextImage() {
-        currentIndex = (currentIndex + 1) % imagesList.length;
-        const item = imagesList[currentIndex];
-        
-        imgElement.classList.remove('loaded');
-        loader.style.display = 'block';
-
-        setTimeout(() => {
-            imgElement.src = item.src;
-            titleEl.textContent = item.title;
-            
-            // Randomizar puntos de datos
-            document.querySelectorAll('.idash-data-point').forEach(dp => {
-                dp.style.top = (20 + Math.random() * 60) + '%';
-                dp.style.left = (20 + Math.random() * 60) + '%';
-            });
-
-            imgElement.onload = () => {
-                loader.style.display = 'none';
-                imgElement.classList.add('loaded');
-            };
-        }, 400); 
-    }
-
-    // Cambiar imagen automáticamente cada 4 segundos
-    setInterval(nextImage, 4000);
-
-    // Sistema de Drag and Drop + Parallax
-    const mainView = document.getElementById('idashMainView');
-    const tablet = document.getElementById('idashTablet');
-    
-    let isDragging = false;
-    let startX, startY;
-    let initialX = 0, initialY = 0; // Offset actual
-    let currentRotateX = 0, currentRotateY = 0; // Rotación actual del parallax
-    
-    // Centrar inicialmente
-    function centerTablet() {
-        if(window.innerWidth > 900) {
-            tablet.style.left = '50%';
-            tablet.style.top = '50%';
-            tablet.style.marginLeft = '-425px'; // la mitad del ancho (850)
-            tablet.style.marginTop = '-275px';  // la mitad del alto (550)
-        }
-    }
-    centerTablet();
-    window.addEventListener('resize', centerTablet);
-
-    if (mainView && tablet) {
-        // Eventos para Drag
-        mainView.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.clientX - initialX;
-            startY = e.clientY - initialY;
-            tablet.style.transition = 'none'; // Quitar transición al arrastrar para que sea instantáneo
-        });
-
-        window.addEventListener('mouseup', () => {
-            isDragging = false;
-            tablet.style.transition = "transform 0.1s ease-out";
-        });
-
-        // Combinar Drag y Parallax en mousemove
-        mainView.addEventListener('mousemove', (e) => {
-            // Drag Logic
-            if (isDragging) {
-                initialX = e.clientX - startX;
-                initialY = e.clientY - startY;
-            }
-            
-            // Parallax Logic
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-            const mouseX = e.clientX;
-            const mouseY = e.clientY;
-            
-            currentRotateX = ((centerY - mouseY) / 35).toFixed(2);
-            currentRotateY = ((mouseX - centerX) / 35).toFixed(2);
-            
-            // Aplicar ambas transformaciones (Translate del Drag + Rotate del Parallax)
-            tablet.style.transform = `translate(${initialX}px, ${initialY}px) rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg) translateZ(20px)`;
-        });
-
-        mainView.addEventListener('mouseleave', () => {
-            if(!isDragging) {
-                tablet.style.transition = "transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)";
-                tablet.style.transform = `translate(${initialX}px, ${initialY}px) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
-            }
-        });
-
-        mainView.addEventListener('mouseenter', () => {
-            tablet.style.transition = "transform 0.1s ease-out";
-        });
-    }
-});
-</script>
-
 <!-- ─── FOOTER — NODE MEDIANOCHE (único dark) ─── -->
 <footer id="footer">
   <div class="container">
@@ -3856,12 +3868,12 @@ document.addEventListener("DOMContentLoaded", function() {
       <div>
         <div class="footer-col-ttl">Productos</div>
         <ul class="footer-links">
-          <li><a href="#productos">— Web Básica & Premium</a></li>
-          <li><a href="#productos">— Cotizador Digital</a></li>
-          <li><a href="#productos">— Facturador CFDI</a></li>
-          <li><a href="#productos">— Punto de Venta</a></li>
-          <li><a href="#productos">— Asistente IA</a></li>
-          <li><a href="#productos">— Dashboard Ejecutivo</a></li>
+          <li><a href="javascript:void(0)" onclick="scrollToTab('ind')">— Ver Presencia digital</a></li>
+          <li><a href="javascript:void(0)" onclick="scrollToTab('pre')">— Ver Operación y ventas</a></li>
+          <li><a href="javascript:void(0)" onclick="scrollToTab('pre','cfdi')">— Facturador CFDI</a></li>
+          <li><a href="javascript:void(0)" onclick="scrollToTab('adv')">— Ver Avanzados</a></li>
+          <li><a href="javascript:void(0)" onclick="scrollToTab('bun')">— Ver soluciones con ahorro</a></li>
+          <li><a href="javascript:void(0)" onclick="scrollToTab('rec')">— Recurrentes</a></li>
         </ul>
       </div>
       <div>
@@ -3869,14 +3881,13 @@ document.addEventListener("DOMContentLoaded", function() {
         <ul class="footer-links">
           <li><a href="#proceso">Cómo funciona</a></li>
           <li><a href="#showcase-video">Visual</a></li>
-          <li><a href="#testimonios">Testimonios</a></li>
           <li><a href="#faq">FAQ</a></li>
         </ul>
       </div>
       <div>
         <div class="footer-col-ttl">Contacto</div>
         <ul class="footer-links">
-          <li><a href="https://wa.me/5212221234567" target="_blank" rel="noopener">WhatsApp Business</a></li>
+          <li><a href="https://wa.me/527751023249" target="_blank" rel="noopener">WhatsApp Business</a></li>
           <li><a href="/cdn-cgi/l/email-protection#046c6b6865446a6b60612a697c"><span class="__cf_email__" data-cfemail="1f7770737e5f71707b7a317267">[email&#160;protected]</span></a></li>
           <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li>
           <li><a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a></li>
@@ -3992,13 +4003,13 @@ document.addEventListener("DOMContentLoaded", function() {
         <!-- S1 -->
         <div class="pm-section">
           <div class="pm-section-header"><div class="pm-sec-num" aria-hidden="true">1</div><h3>Identidad y Domicilio del Responsable</h3></div>
-          <p><strong>Alianza Quimera para la Innovación S.A.S.</strong> ("NODE" o "el Responsable"), domicilio en Estado de México, México. Responsable del tratamiento de datos conforme a la <strong>LFPDPPP</strong> publicada en el DOF el 20 de marzo de 2025.</p>
+          <p><strong>Alianza Quimera para la Innovación S.A.S. de C.V.</strong> ("NODE" o "el Responsable"), domicilio en Estado de México, México. Responsable del tratamiento de datos conforme a la <strong>LFPDPPP</strong> publicada en el DOF el 20 de marzo de 2025.</p>
           <div class="pm-contact-card">
             <h4>Contacto de Privacidad</h4>
             <p>Para asuntos relacionados con privacidad y protección de sus datos:</p>
-            <a href="mailto:privacidad@node.mx" class="pm-contact-link">
+            <a href="mailto:hola@nodeq.com.mx" class="pm-contact-link">
               <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="3" width="14" height="10" rx="2" stroke-width="1.3"/><path d="M1 5l7 5 7-5" stroke-width="1.3" stroke-linecap="round"/></svg>
-              privacidad@node.mx
+              hola@nodeq.com.mx
             </a>
           </div>
         </div>
@@ -4051,7 +4062,7 @@ document.addEventListener("DOMContentLoaded", function() {
             </table>
           </div>
           <h4>3.2 Finalidades Secundarias (requieren consentimiento)</h4>
-          <div class="pm-callout"><strong>Puede oponerse:</strong> Escríbanos a <a href="mailto:privacidad@node.mx">privacidad@node.mx</a> con asunto <em>"Oposición finalidades secundarias"</em>.</div>
+          <div class="pm-callout"><strong>Puede oponerse:</strong> Escríbanos a <a href="mailto:hola@nodeq.com.mx">hola@nodeq.com.mx</a> con asunto <em>"Oposición finalidades secundarias"</em>.</div>
           <ul>
             <li>Marketing y comunicación comercial sobre nuevos servicios de NODE</li>
             <li>Encuestas de satisfacción para mejorar la calidad del servicio</li>
@@ -4080,7 +4091,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <div class="pm-arco-card"><div class="pm-arco-letter">C</div><h5>Cancelación</h5><p>Pedir que eliminemos sus datos cuando ya no sean necesarios.</p></div>
             <div class="pm-arco-card"><div class="pm-arco-letter">O</div><h5>Oposición</h5><p>Oponerse al tratamiento para finalidades secundarias o si causa perjuicio.</p></div>
           </div>
-          <p style="margin-top:.875rem">Envíe solicitud a <strong><a href="mailto:privacidad@node.mx" style="color:var(--indigo)">privacidad@node.mx</a></strong> con asunto <em>"Solicitud ARCO"</em> incluyendo nombre, descripción del derecho y copia de identificación.</p>
+          <p style="margin-top:.875rem">Envíe solicitud a <strong><a href="mailto:hola@nodeq.com.mx" style="color:var(--indigo)">hola@nodeq.com.mx</a></strong> con asunto <em>"Solicitud ARCO"</em> incluyendo nombre, descripción del derecho y copia de identificación.</p>
           <div class="pm-callout"><strong>Plazo:</strong> NODE responde en máximo <strong>20 días hábiles</strong> desde la recepción.</div>
         </div>
 
@@ -4106,12 +4117,12 @@ document.addEventListener("DOMContentLoaded", function() {
           <p>La <strong>Secretaría Anticorrupción y Buen Gobierno</strong> (antes INAI) supervisa el cumplimiento de la LFPDPPP 2025. Puede acudir a ella si considera que se vulneraron sus derechos.</p>
           <div class="pm-contact-card">
             <h4>NODE — Responsable de Privacidad</h4>
-            <p>Alianza Quimera para la Innovación S.A.S. · Estado de México, México</p>
-            <a href="mailto:privacidad@node.mx" class="pm-contact-link">
+            <p>Alianza Quimera para la Innovación S.A.S. de C.V. · Estado de México, México</p>
+            <a href="mailto:hola@nodeq.com.mx" class="pm-contact-link">
               <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="3" width="14" height="10" rx="2" stroke-width="1.3"/><path d="M1 5l7 5 7-5" stroke-width="1.3" stroke-linecap="round"/></svg>
-              privacidad@node.mx
+              hola@nodeq.com.mx
             </a>
-            <a href="https://wa.me/5212221234567" class="pm-contact-link" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/527751023249" class="pm-contact-link" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5A6.5 6.5 0 1 1 2.37 11.5L1 15l3.68-1.33A6.5 6.5 0 0 1 8 1.5z" stroke-width="1.3" stroke-linejoin="round"/></svg>
               WhatsApp Business
             </a>
@@ -4152,7 +4163,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <span class="pm-chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>Google Analytics 4 (_ga)</span>
             <span class="pm-chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>Hotjar (_hjSession)</span>
           </div>
-          <p style="margin-top:.625rem;font-size:.8125rem;color:var(--text-tertiary)">Duración: hasta 2 años. Para revocar escribe a <a href="mailto:privacidad@node.mx" style="color:var(--text-accent);font-weight:600">privacidad@node.mx</a>.</p>
+          <p style="margin-top:.625rem;font-size:.8125rem;color:var(--text-tertiary)">Duración: hasta 2 años. Para revocar escribe a <a href="mailto:hola@nodeq.com.mx" style="color:var(--text-accent);font-weight:600">hola@nodeq.com.mx</a>.</p>
         </div>
 
         <div class="pm-chips-section" style="margin-top:1.25rem">
@@ -4182,7 +4193,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         <div class="pm-section">
           <div class="pm-section-header"><div class="pm-sec-num" aria-hidden="true">1</div><h3>Aceptación de los Términos</h3></div>
-          <p>Al acceder y utilizar el sitio web de NODE usted acepta quedar obligado por estos Términos. El Sitio es operado por <strong>Alianza Quimera para la Innovación S.A.S.</strong>, Estado de México, México.</p>
+          <p>Al acceder y utilizar el sitio web de NODE usted acepta quedar obligado por estos Términos. El Sitio es operado por <strong>Alianza Quimera para la Innovación S.A.S. de C.V.</strong>, Estado de México, México.</p>
           <div class="pm-callout"><strong>Aviso:</strong> NODE se reserva el derecho de actualizar estos Términos en cualquier momento. El uso continuado implica aceptación de los cambios.</div>
         </div>
 
@@ -4248,12 +4259,12 @@ document.addEventListener("DOMContentLoaded", function() {
           <p>Estos Términos se rigen por las leyes de los <strong>Estados Unidos Mexicanos</strong>. Para cualquier controversia, las partes se someten a los <strong>tribunales competentes de la Ciudad de México</strong>, renunciando a cualquier otro fuero.</p>
           <div class="pm-contact-card">
             <h4>NODE Soluciones Tecnológicas</h4>
-            <p>Alianza Quimera para la Innovación S.A.S. · Estado de México, México</p>
-            <a href="mailto:hola@node.mx" class="pm-contact-link">
+            <p>Alianza Quimera para la Innovación S.A.S. de C.V. · Estado de México, México</p>
+            <a href="mailto:hola@nodeq.com.mx" class="pm-contact-link">
               <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="3" width="14" height="10" rx="2" stroke-width="1.3"/><path d="M1 5l7 5 7-5" stroke-width="1.3" stroke-linecap="round"/></svg>
-              hola@node.mx
+              hola@nodeq.com.mx
             </a>
-            <a href="https://wa.me/5212221234567" class="pm-contact-link" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/527751023249" class="pm-contact-link" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5A6.5 6.5 0 1 1 2.37 11.5L1 15l3.68-1.33A6.5 6.5 0 0 1 8 1.5z" stroke-width="1.3" stroke-linejoin="round"/></svg>
               WhatsApp Business
             </a>
@@ -4281,7 +4292,7 @@ document.addEventListener("DOMContentLoaded", function() {
   </div>
   <div>
     <div class="ct-title">¡Preferencias guardadas!</div>
-    <div class="ct-text">Gracias. Ahora puedes disfrutar el sitio.</div>
+    <div class="ct-text">Gracias. Ahora puedes disfrutar el.</div>
   </div>
 </div>
 
@@ -4316,9 +4327,12 @@ document.addEventListener("DOMContentLoaded", function() {
 </div>
 <div class="nod-fab">
   <div class="nod-tooltip">&#x1F44B; &#xBF;En qu&#xE9; te puedo ayudar?</div>
-  <button class="nod-trigger" type="button" onclick="nodToggle()" id="nodTrigger" aria-label="Abrir asistente NOD" style="padding: 0; overflow: hidden; border: 2px solid #00ffcc; background: #000;">
-    <span class="nod-notif" aria-hidden="true" style="z-index: 10;"></span>
-    <video src="NODE IA.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; pointer-events: none;"></video>
+  <button class="nod-trigger" type="button" onclick="nodToggle()" id="nodTrigger" aria-label="Abrir asistente NOD">
+    <span class="nod-notif" aria-hidden="true"></span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      <path d="M8 10h8"/><path d="M8 14h5"/>
+    </svg>
   </button>
 </div>
 
@@ -4341,7 +4355,7 @@ window.addEventListener('scroll', () => {
 function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
 function closeMenu()  { document.getElementById('mobileMenu').classList.remove('open'); }
 
-// ── CHATBOT TOGGLE — legacy alias handled by NOD ──
+
 
 // ── SCROLL REVEAL (con fallback garantizado) ──
 function revealAll() {
@@ -4404,7 +4418,7 @@ function toggleFaq(btn) {
 // ══════════════════════════════════════════════════════════
 
 var NOD_WA  = '527751023249';
-var NOD_CAL = 'https://calendly.com/hola-nodeq/20-minute-meeting-clone';
+var NOD_CAL = 'https://calendly.com/nodeq/20-minute-meeting-clone';
 
 // ── STATE ──
 var nodHistory       = [];
@@ -5101,39 +5115,59 @@ function nodKeydown(e) {
 // Controlan los modales "Qué incluye" y "Al terminar tendrás"
 // ══════════════════════════════════════════
 
+// ── Almacena posición del scroll antes de bloquear el body ──
+var _bimScrollY = 0;
+
 function openBIM(id) {
   var overlay = document.getElementById(id);
   if (!overlay) return;
-  // Cerrar cualquier otro modal abierto
+  // Cerrar cualquier otro modal abierto sin restaurar scroll todavía
   document.querySelectorAll('.bim-overlay.open').forEach(function(el) {
     el.classList.remove('open');
   });
-  overlay.classList.add('open');
+  // Guardar posición actual ANTES de bloquear
+  _bimScrollY = window.scrollY || window.pageYOffset;
+  // Fijar el body en su posición actual para que no salte
+  document.body.style.top = '-' + _bimScrollY + 'px';
+  document.body.style.position = 'fixed';
+  document.body.style.width = '100%';
   document.body.style.overflow = 'hidden';
+  overlay.classList.add('open');
+}
+
+function _closeBIMBody() {
+  // Restaurar el body exactamente donde estaba
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.width = '';
+  document.body.style.overflow = '';
+  window.scrollTo({ top: _bimScrollY, behavior: 'instant' });
 }
 
 function closeBIM(id) {
   var overlay = document.getElementById(id);
   if (!overlay) return;
   overlay.classList.remove('open');
-  document.body.style.overflow = '';
+  _closeBIMBody();
 }
 
 function closeBIMOutside(event, overlay) {
   // Cerrar solo si se hace clic directamente en el overlay (fuera del panel)
   if (event.target === overlay) {
     overlay.classList.remove('open');
-    document.body.style.overflow = '';
+    _closeBIMBody();
   }
 }
 
 // Cerrar con tecla Escape
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
+    var anyOpen = false;
     document.querySelectorAll('.bim-overlay.open').forEach(function(el) {
       el.classList.remove('open');
+      anyOpen = true;
     });
-    document.body.style.overflow = '';
+    if (anyOpen) _closeBIMBody();
   }
 });
 // FIN BUNDLE INFO MODALS
@@ -5454,7 +5488,6 @@ sections.forEach(s => secObs.observe(s));
     toast.classList.add('ct-visible');
     setTimeout(function() { toast.classList.remove('ct-visible'); }, 3500);
   }
-
   /* ── Escape cierra el modal ── */
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
@@ -5466,6 +5499,71 @@ sections.forEach(s => secObs.observe(s));
   });
 
 })();
+</script>
+
+<!-- ── FOOTER TAB NAVIGATOR ── -->
+<script>
+/**
+ * scrollToTab(tabId, highlight)
+ * Navega a #productos, activa el tab correcto y, si se indica
+ * highlight='cfdi', hace scroll y resalta la card del Facturador.
+ *
+ * tabId map (coincide con switchTab existente):
+ *   'ind' → Presencia digital
+ *   'pre' → Operación y ventas
+ *   'adv' → Avanzados
+ *   'bun' → Soluciones / Bundles
+ *   'rec' → Recurrentes
+ */
+function scrollToTab(tabId, highlight) {
+  var section = document.getElementById('productos');
+  if (!section) return;
+
+  /* 1 — Scroll suave a la sección */
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  /* 2 — Activar el tab tras dejar que el scroll termine */
+  setTimeout(function () {
+    var tabBar = section.querySelector('.tab-bar');
+    if (!tabBar) return;
+
+    var tabButtons = tabBar.querySelectorAll('.tab-btn');
+    var tabMap = { ind: 0, pre: 1, adv: 2, bun: 3, rec: 4 };
+    var idx = tabMap[tabId];
+
+    if (typeof idx !== 'undefined' && tabButtons[idx]) {
+      tabButtons[idx].click();  /* reutiliza switchTab() ya existente */
+    }
+
+    /* 3 — Highlight específico de la card de Facturador CFDI */
+    if (highlight === 'cfdi') {
+      setTimeout(function () {
+        var panel = document.getElementById('tab-pre');
+        if (!panel) return;
+        var cards = panel.querySelectorAll('.price-card');
+        var cfdiCard = null;
+        cards.forEach(function (c) {
+          if (!cfdiCard &&
+              (c.textContent.indexOf('Facturador') !== -1 ||
+               c.textContent.indexOf('CFDI') !== -1)) {
+            cfdiCard = c;
+          }
+        });
+        if (cfdiCard) {
+          cfdiCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          /* Ring de foco visual — respeta las CSS vars del design system */
+          cfdiCard.style.transition  = 'box-shadow 0.3s ease, border-color 0.3s ease';
+          cfdiCard.style.boxShadow   = '0 0 0 3px rgba(67,56,202,0.40), 0 8px 24px rgba(67,56,202,0.18)';
+          cfdiCard.style.borderColor = '#4338CA';
+          setTimeout(function () {
+            cfdiCard.style.boxShadow   = '';
+            cfdiCard.style.borderColor = '';
+          }, 2400);
+        }
+      }, 420);
+    }
+  }, 520);
+}
 </script>
 
 <!-- PREMIUM CURSOR GLOW -->
@@ -5603,6 +5701,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
-
 </body>
 </html>
